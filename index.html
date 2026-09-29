@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGTrader MT5 - Algoritmikus Kereskedési Rendszer</title>
+    <!-- Modern betűtípus és ikonok -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        :root {
+            --bg-color: #0c1017;
+            --card-bg: #161b22;
+            --text-color: #f0f6fc;
+            --text-muted: #8b949e;
+            --accent-color: #2f81f7;
+            --accent-success: #238636;
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo-area {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-center: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo-area i {
+            color: var(--accent-color);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 15fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 i {
+            color: var(--accent-color);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #246cd0;
+        }
+
+        .btn-success {
+            background-color: var(--accent-success);
+        }
+
+        .btn-success:hover {
+            background-color: #2ea043;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(35, 134, 54, 0.15);
+            color: #56d364;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <i class="fa-solid fa-chart-line"></i> PGTrader MT5
+            </div>
+            <p>MetaTrader 5 alapú automatizált elemzések és kereskedési riportok</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- 1. Kártya: Riport Elérése -->
+            <div class="card">
+                <div class="status-badge">
+                    <i class="fa-solid fa-circle-check"></i> Aktív elemzés
+                </div>
+                <h2><i class="fa-solid fa-file-invoice-dollar"></i> FXPro Piaci Riport</h2>
+                <p>Legfrissebb automatizált stratégiai jelentés 53 eszközre kiterjedően. Bitcoin és árrés alapú kamatsorrendek, egyedi beépített jegyzetekkel.</p>
+                <a href="fxpro_teljes_piaci_riport.html" class="btn btn-success">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Riport megnyitása
+                </a>
+            </div>
+
+            <!-- 2. Kártya: Rendszer leírás -->
+            <div class="card">
+                <h2><i class="fa-solid fa-gears"></i> Rendszerinformáció</h2>
+                <p>A háttérben futó MT5 szkript folyamatosan figyeli a piaci elmozdulásokat, értékeli a swap feltételeket, és strukturált formában exportálja az adatokat.</p>
+                <a href="https://github.com" target="_blank" class="btn">
+                    <i class="fa-brands fa-github"></i> GitHub Profil
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 PGTrader MT5. Minden jog fenntartva. | Frissítve az MT5 motor által.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
