@@ -3,127 +3,212 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FXPro Master Compact Portal</title>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <title>FXPro Master Compact Terminal</title>
     <style>
         :root {
-            --bg-main: #0a0e17;
-            --bg-card: #111827;
-            --border-color: #374151;
+            --bg-color: #05070a;
+            --card-bg: rgba(10, 15, 26, 0.6);
+            --accent-green: #00ff66;
+            --accent-purple: #8a2be2;
             --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
+            --text-muted: #6b7280;
+            --border-color: rgba(255, 255, 255, 0.05);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            background-color: var(--bg-main);
+            background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
         }
-        .portal-card {
-            background-color: var(--bg-card);
+
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        body::before { top: 15%; left: 20%; background: var(--accent-green); }
+        body::after { bottom: 15%; right: 20%; background: var(--accent-purple); }
+
+        .terminal-card {
+            width: 100%;
+            max-width: 550px;
+            padding: 45px 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            margin: 20px;
+            box-sizing: border-box;
         }
-        .logo-area {
-            font-size: 28px;
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(0, 255, 102, 0.06);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            color: var(--accent-green);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 26px;
             font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-        }
-        .logo-area span {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            letter-spacing: -0.5px;
+            margin: 0 0 8px 0;
+            background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .subtitle {
-            font-size: 14px;
             color: var(--text-muted);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 40px;
+            letter-spacing: 0.2px;
         }
-        .info-box {
-            background-color: #0a0e17;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 30px;
-            text-align: left;
-            font-size: 13px;
-        }
-        .info-row {
+
+        .action-grid {
             display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .info-row:last-child { margin-bottom: 0; }
-        .info-label { color: var(--text-muted); }
-        .info-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
-        .repo-link {
-            color: var(--accent-blue);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .repo-link:hover { color: #60a5fa; text-decoration: underline; }
-        .btn-enter {
-            display: inline-block;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
-            color: #ffffff;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
-            border-radius: 8px;
-            font-size: 15px;
-            letter-spacing: 0.5px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.3px;
         }
-        .btn-enter:hover {
+
+        .btn-report:hover {
+            background: rgba(0, 255, 102, 0.03);
+            border-color: rgba(0, 255, 102, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+        .btn-report:hover .btn-icon { color: var(--accent-green); }
+
+        .btn-github:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .btn-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .arrow-icon {
+            font-size: 12px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            transition: transform 0.2s;
+        }
+        .nav-btn:hover .arrow-icon {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        .legal-notice {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.25);
+            text-align: justify;
+            line-height: 1.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 255, 102, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
         }
     </style>
 </head>
 <body>
-    <div class="portal-card">
-        <div class="logo-area">FXPro <span>Master Compact</span></div>
-        <div class="subtitle">Automatizált Kereskedési Riportrendszer</div>
-        
-        <div class="info-box">
-            <div class="info-row">
-                <span class="info-label">Rendszer Státusz:</span>
-                <span class="info-value" style="color: var(--accent-green);">ONLINE</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Követett termékek:</span>
-                <span class="info-value" style="color: #ffffff;">254 Instrumentum</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Index frissítve (Helyi):</span>
-                <span class="info-value">2026-10-21 19:55:58</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">GitHub Repository:</span>
-                <span class="info-value">
-                    <a class="repo-link" href="https://github.com" target="_blank">pgtradermt5/fxpro-riport</a>
-                </span>
-            </div>
-        </div>
 
-        <a href="fxpro_teljes_piaci_riport.html" class="btn-enter">Belépés a Teljes Piaci Riporthoz</a>
+    <div class="terminal-card">
+        <div class="status-badge">
+            <div class="pulse-dot"></div>
+            <span>Rendszer aktív</span>
+        </div>
+        
+        <h1>FXPRO MASTER COMPACT</h1>
+        <div class="subtitle">Kereskedés-elemző és Automatizált Riportrendszer</div>
+        
+        <div class="action-grid">
+            <a href="fxpro_teljes_piaci_riport.html" class="nav-btn btn-report">
+                <div class="btn-label">
+                    <span class="btn-icon">📊</span>
+                    <span>Piaci Jelentések & Grafikonok</span>
+                </div>
+                <span class="arrow-icon">➔</span>
+            </a>
+            
+            <a href="https://github.com" target="_blank" class="nav-btn btn-github">
+                <div class="btn-label">
+                    <span class="btn-icon">💻</span>
+                    <span>GitHub Repositories & Forráskód</span>
+                </div>
+                <span class="arrow-icon">➔</span>
+            </a>
+        </div>
+        
+        <div class="legal-notice">
+            <strong>Kockázati nyilatkozat:</strong> A felületen elérhető adatok és elemzések kizárólag edukációs és személyes tájékozódási célokat szolgálnak. Nem minősülnek pénzügyi vagy befektetési tanácsadásnak. A tőkeáttételes tőzsdei ügyletek kiemelkedően magas kockázattal járnak.
+        </div>
     </div>
+
 </body>
 </html>
