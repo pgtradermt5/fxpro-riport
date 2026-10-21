@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FXPro Master Compact Portal (Mobil)</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0e17;
+            --bg-card: #111827;
+            --border-color: #374151;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            
+            padding-top: calc(20px + env(safe-area-inset-top));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            padding-left: calc(20px + env(safe-area-inset-left));
+            padding-right: calc(20px + env(safe-area-inset-right));
+        }
+        .portal-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px 24px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        .logo-area {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .logo-area span {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mobile-badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+        .info-box {
+            background-color: #0a0e17;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+            font-size: 13px;
+        }
+        .info-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .info-row:last-child { margin-bottom: 0; }
+        .info-label { color: var(--text-muted); flex-shrink: 0; }
+        .info-value { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-weight: 500; 
+            text-align: right;
+            word-break: break-all;
+        }
+        .repo-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .repo-link:hover { color: #60a5fa; text-decoration: underline; }
+        .btn-enter {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+        .btn-enter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: calc(12px + env(safe-area-inset-top));
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                padding-left: calc(12px + env(safe-area-inset-left));
+                padding-right: calc(12px + env(safe-area-inset-right));
+            }
+            .portal-card {
+                padding: 24px 16px;
+            }
+            .logo-area {
+                font-size: 22px;
+            }
+            .info-box {
+                padding: 12px;
+            }
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                margin-bottom: 12px;
+            }
+            .info-value {
+                text-align: left;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-card">
+        <div class="logo-area">
+            FXPro <span>Master Compact</span>
+            <span class="mobile-badge">mobil</span>
+        </div>
+        <div class="subtitle">Automatizált Kereskedési Riportrendszer</div>
+        
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">Rendszer Státusz:</span>
+                <span class="info-value" style="color: var(--accent-green);">ONLINE</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Követett termékek:</span>
+                <span class="info-value" style="color: #ffffff;">254 Instrumentum</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Index frissítve (Helyi):</span>
+                <span class="info-value">2026-10-21 23:13:06</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">GitHub Repository:</span>
+                <span class="info-value">
+                    <a class="repo-link" href="https://github.com" target="_blank">pgtradermt5/fxpro-riport</a>
+                </span>
+            </div>
+        </div>
+
+        <a href="fxpro_teljes_piaci_riport.html" class="btn-enter">Belépés a Teljes Piaci Riporthoz</a>
+    </div>
+</body>
+</html>
