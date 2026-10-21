@@ -1,64 +1,73 @@
-# fxpro-riport
+# 📊 FxPro Riport & Premium Analytics Dashboard
 
-\# 📊 FXPro Master Compact - Automatizált Kereskedési Riportrendszer
+[![MQL5](https://shields.io)](https://mql5.com)
+[![Python](https://shields.io)](https://python.org)
+[![GitHub Pages](https://shields.io)](https://github.com)
+[![License: MIT](https://shields.io)](https://opensource.org)
 
+Egy professzionális, automatizált kereskedési és elemző rendszer, amely összeköti a **MetaTrader 5 (MQL5)** környezetet a modern **Python-alapú adatanalitikával**, valamint automatikus **GitHub Pages** riportálással rendelkezik.
 
+---
 
-Ez a projekt egy \*\*egyedi készítésű, automatizált pénzügyi elemző- és riportáló rendszer\*\*, amely a MetaTrader 5 (MT5) tőzsdei terminálból származó adatokat dolgozza fel, rendszerezi, majd egy teljesen automatizált folyamat végén közzéteszi egy online, bárhonnan elérhető weboldalon.
+## 🚀 Főbb Funkciók
 
+*   **Automatizált Adatfeldolgozás:** MQL5 környezetből származó strukturált adatok automatikus szinkronizációja.
+*   **Premium UI Dashboard:** Modern, reszponzív HTML/JS alapú riport felület (index.html).
+*   **Git & GitHub Pages Automatizáció:** Egykattintásos vagy teljesen automatizált távoli szinkronizáció biztonságos token-kezeléssel.
+*   **Moduláris Architektúra:** Könnyen bővíthető, szeparált logikai rétegek az indikátorok, adatok és a megjelenítés számára.
 
+---
 
-\## 🌐 Élő Weboldalak Elérése
+## 📂 Projekt Struktúra
 
-A rendszer által generált, sötét módú (Dark Mode), interaktív grafikonos riportok az alábbi linkeken érhetőek el:
+```text
+modularis_struktura/
+│
+├── github_sync.py          # GitHub szinkronizációért és push-ért felelős Python szkript
+└── githubkod.txt           # GitHub Personal Access Token (biztonságosan kezelve)
 
-\*   👉 \[Fő Piaci Riport (index.html)](https://github.io)
+fxpro-riport/ (Git Repository & GitHub Pages)
+│
+├── index.html              # A prémium UI riport és dashboard főoldala
+└── README.md               # [Ez a fájl] A generált, professzionális projektleírás
+```
 
-\*   👉 \[Teljes Piaci Jelentés (fxpro\_teljes\_piaci\_riport.html)](https://github.iofxpro\_teljes\_piaci\_riport.html)
+---
 
-\## 🚀 Főbb Funkciók és Tudás
+## 🛠️ Telepítés és Beállítás
 
-\*   \*\*254 Pénzügyi Termék Követése:\*\* A rendszer hatalmas mennyiségű devizapárt, kriptovalutát és egyéb instrumentumot képes egyidejűleg kezelni.
+### 1. Előfeltételek
+Győződj meg róla, hogy a Python 3.8+ és a Git telepítve van a rendszereden.
 
-\*   \*\*Swap-alapú Rangsorolás:\*\* A Carry Trade (kamatvadász) stratégiáknak megfelelően a pozitív kamatú (Swap) termékeket automatikusan előre sorolja, azon belül pedig a legalacsonyabb költségű (Spread) szerint rendezi őket.
+### 2. Környezet beállítása
+A `github_sync.py` mellett található `githubkod.txt` fájlba helyezd el a GitHub Personal Access Tokenedet.
 
-\*   \*\*Fejlett Grafikonok (Plotly):\*\* Minden termékhez automatikus D1 idősíkú gyertyadiagramot rajzol, kiegészítve egy precíz MACD indikátorral (fővonal és szignálvonal).
+### 3. Szinkronizáció indítása
+Futtasd a szinkronizációs szkriptet manuálisan a parancssorból, vagy hívd meg automatizálva:
+```bash
+python github_sync.py
+```
 
-\*   \*\*Tranzakció és Jegyzet Követés:\*\* A grafikonok alatt vizuálisan megjeleníti az éppen futó (BUY/SELL) pozíciókat, a lezárt múltbeli trade-eket, valamint a webes felületen hozzáadott egyedi jegyzeteket.
+---
 
-\*   \*\*Dupla Jogi Védelem:\*\* A riportok tetején és alján is hivatalos, sötétvörös szegélyű Kockázati Figyelmeztetés és Felelősségkizárás található.
+## 💻 Technológiai Stakk
 
+*   **Kereskedési Környezet:** MQL5 (MetaTrader 5 Terminal)
+*   **Szkriptnyelv & Logika:** Python 3
+*   **Verziókövetés & Hoszting:** Git, GitHub, GitHub Pages
+*   **Frontend / UI:** Prémium HTML5, CSS3 (Tailwind/Bootstrap), modern JavaScript diagramok
 
+---
 
-\## 📁 A Projekt Architektúrája
+## 🔒 Biztonság (Security)
 
-A rendszer moduláris felépítésű, az alábbi komponensekből áll:
+A `githubkod.txt` fájl tartalmazza a GitHub eléréshez szükséges privát azonosítót. **Soha ne töltsd fel ezt a fájlt nyilvános repozitóriumba!** A token védelméről a helyi könyvtárszerkezet gondoskodik.
 
-1\.  `data\_manager.py` – Az adatfeldolgozó motor. Beolvassa és szűri az MT5 CSV táblázatait.
+---
 
-2\.  `riport\_generalo1.py` – A HTML és grafikon gyártó. Elvégzi az elemzést és a Git alapú GitHub feltöltést.
+## 📜 Licenc
 
-3\.  `riport\_generalo\_idozito.py` – Az automata robotpilóta. Biztosítja a napi rendszerességű háttérben futást.
+Ez a projekt az **MIT Licenc** alatt érhető el. Részletekért lásd a [LICENSE](LICENSE) fájlt.
 
-4\.  `githubkod.txt` – A biztonságos hitelesítésért felelős, 40 karakteres egyedi GitHub Token tárolója.
-
-\## 📊 Felhasznált Adatfájlok (MT5 Files)
-
-A programok a háttérben az alábbi helyi fájlokból építkeznek:
-
-\*   `fxpro\_history\_macd\_fast.csv` – Nyers tőzsdei árak és indikátor adatok.
-
-\*   `fxpro\_trade\_history.csv` – Aktív és lezárt kereskedési pozíciók listája.
-
-\*   `fxpro\_notes.csv` – Instrumentumokhoz fűzött egyedi felhasználói feljegyzések.
-
-\*   `fxpro\_height\_config.json` – Grafikonok magassági beállításai.
-
-
-
-\## ⚠️ Jogi és Kockázati Figyelmeztetés
-
-A projektben generált adatok és grafikonok kizárólag edukációs, oktatási és személyes tájékozódási célokat szolgálnak. Nem minősülnek hivatalos befektetési tanácsadásnak, sem ajánlattételnek! A tőkeáttételes tőzsdei kereskedés magas kockázattal jár, a múltbeli hozamok és swap adatok pedig nem jelentenek garanciát a jövőbeli teljesítményre.
-
-
-
+---
+*Utolsó automatikus frissítés: 2026-10-21*
