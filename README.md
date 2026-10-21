@@ -1,9 +1,8 @@
 # 📊 FxPro Riport & Premium Analytics Dashboard
 
-[![MQL5](https://shields.io)](https://mql5.com)
-[![Python](https://shields.io)](https://python.org)
-[![GitHub Pages](https://shields.io)](https://github.com)
-[![License: MIT](https://shields.io)](https://opensource.org)
+🔹 **MQL5** · MetaTrader 5 | 🔹 **Python** · adatanalítika | 🔹 **GitHub Pages** · Live Dashboard | 🔹 **Licenc** · MIT
+
+---
 
 Egy professzionális, automatizált kereskedési és elemző rendszer, amely összeköti a **MetaTrader 5 (MQL5)** környezetet a modern **Python-alapú adatanalitikával**, valamint automatikus **GitHub Pages** riportálással rendelkezik.
 
