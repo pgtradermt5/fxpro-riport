@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Összevont Munkavédelmi és Technológiai Teszt</title>
+    <style>
+        :root {
+            --bg-color: #121824;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: var(--card-bg); width: 100%; max-width: 600px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; text-align: center; }
+        h1 { font-size: 24px; margin-bottom: 10px; color: #fff; }
+        h2 { font-size: 20px; margin-bottom: 20px; }
+        p { color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; }
+        .stats-bar { display: flex; justify-content: space-between; margin-bottom: 20px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 14px; }
+        .question-box { background: rgba(255,255,255,0.02); border: 1px solid #334155; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left; min-height: 120px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; }
+        .answers-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 25px; }
+        .btn-opt { background: #273549; border: 1px solid #3b4f6a; color: var(--text-color); padding: 14px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 16px; transition: all 0.2s; }
+        .btn-opt:hover { background: #334662; border-color: var(--accent-color); }
+        .btn-opt.correct { background: var(--success) !important; border-color: var(--success); color: white; }
+        .btn-opt.wrong { background: var(--danger) !important; border-color: var(--danger); color: white; }
+        .btn-main { background-color: var(--accent-color); color: white; border: none; padding: 14px 28px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .btn-main:hover { background-color: var(--accent-hover); }
+        .hidden { display: none; }
+        .circle-chart { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--accent-color) 0%, #334155 0%); display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto; position: relative; }
+        .circle-chart::before { content: ''; position: absolute; width: 100px; height: 100px; background-color: var(--card-bg); border-radius: 50%; }
+        .circle-text { position: relative; font-size: 24px; font-weight: bold; color: white; }
+        .summary-details { margin-bottom: 30px; font-size: 16px; text-align: left; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; }
+        .summary-details div { margin-bottom: 8px; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 1. OLDAL -->
+        <div id="screen-start">
+            <h1>Összevont Munkavédelmi és Technológiai Teszt</h1>
+            <h2>Munkavédelmi Teszt</h2>
+            <p>A teszt 50 kérdést tartalmaz (Munkavédelem, Ergológia, Balesetvédelem, Informatika és Resin 3D Nyomtatás).</p>
+            <button class="btn-main" onclick="startTest()">Teszt Indítása</button>
+        </div>
+        <!-- 2. OLDAL -->
+        <div id="screen-quiz" class="hidden">
+            <div class="stats-bar">
+                <span id="progress-text">1 / 50</span>
+                <div>
+                    <span style="color: var(--success)">Helyes: <b id="score-correct">0</b></span> | 
+                    <span style="color: var(--danger)">Helytelen: <b id="score-wrong">0</b></span>
+                </div>
+            </div>
+            <div class="question-box" id="question-text">Kérdés betöltése...</div>
+            <div class="answers-grid" id="answers-container"></div>
+            <button class="btn-main hidden" id="btn-next" onclick="nextQuestion()">Következő kérdés</button>
+        </div>
+
+        <!-- 3. OLDAL -->
+        <div id="screen-result" class="hidden">
+            <h2>Teszt Befejezve!</h2>
+            <div class="circle-chart" id="result-circle">
+                <span class="circle-text" id="result-percent">0%</span>
+            </div>
+            <div class="summary-details">
+                <div><span>Összes válasz:</span> <b id="res-total">0/50</b></div>
+                <div><span>Helyes találat:</span> <b id="res-correct" style="color: var(--success)">0</b></div>
+            </div>
+            <button class="btn-main" onclick="restartTest()">Újrapróbálkozás</button>
+        </div>
+    </div>
+
+    <script>
+        const questionBank = [
+            { q: "Milyen védőfelszerelést kötelező használni Resin (gyantás) 3D nyomtatás során a folyékony alapanyag kezelésekor?", a: ["Sima pamut kesztyű", "Nitrile kesztyű és védőszemüveg", "Nem szükséges védőfelszerelés", "Kizárólag pormaszk"], c: 1 },
+            { q: "Mi a teendő áramütéses baleset esetén elsősorban?", a: ["A sérült azonnali elhúzása kézzel", "Áramtalanítás vagy a sérült kiszabadítása szigetelt eszközzel", "Mentők hívása az áramtalanítás előtt", "A sérült lelocsolása vízzel"], c: 1 },
+            { q: "Milyen szoftveres megoldás alkalmas a verziókövetésre az informatika területén?", a: ["Excel", "Photoshop", "Git", "Word"], c: 2 },
+            { q: "Mi az ergonómia fő célja a munkahelyen?", a: ["A munkaidő maximális meghosszabbítása", "A munkakörnyezet emberi adottságokhoz igazítása", "A gépek fogyasztásának csökkentése", "A papírmunka digitalizálása"], c: 1 }
+        ];
+
+        let currentIdx = 0; let correctCount = 0; let wrongCount = 0; let answered = false;
+
+        function startTest() {
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            currentIdx = 0; correctCount = 0; wrongCount = 0;
+            updateStats(); loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false; document.getElementById('btn-next').classList.add('hidden');
+            const qData = questionBank[currentIdx]; document.getElementById('question-text').innerText = qData.q;
+            const container = document.getElementById('answers-container'); container.innerHTML = '';
+            qData.a.forEach((ans, idx) => {
+                const btn = document.createElement('button'); btn.className = 'btn-opt'; btn.innerText = ans;
+                btn.onclick = () => selectAnswer(idx, btn); container.appendChild(btn);
+            });
+        }
+        function selectAnswer(idx, btnElement) {
+            if (answered) return; answered = true;
+            const qData = questionBank[currentIdx]; const buttons = document.getElementById('answers-container').children;
+            if (idx === qData.c) { btnElement.classList.add('correct'); correctCount++; } 
+            else { btnElement.classList.add('wrong'); buttons[qData.c].classList.add('correct'); wrongCount++; }
+            updateStats(); document.getElementById('btn-next').classList.remove('hidden');
+            if (currentIdx === questionBank.length - 1) { document.getElementById('btn-next').innerText = "Teszt Befejezve!"; } 
+            else { document.getElementById('btn-next').innerText = "Következő kérdés"; }
+        }
+
+        function nextQuestion() {
+            if (currentIdx < questionBank.length - 1) {
+                currentIdx++; document.getElementById('progress-text').innerText = `${currentIdx + 1} / 50`; loadQuestion();
+            } else { showResult(); }
+        }
+
+        function updateStats() {
+            document.getElementById('progress-text').innerText = `${currentIdx + 1} / 50`;
+            document.getElementById('score-correct').innerText = correctCount; document.getElementById('score-wrong').innerText = wrongCount;
+        }
+
+        function showResult() {
+            document.getElementById('screen-quiz').classList.add('hidden'); document.getElementById('screen-result').classList.remove('hidden');
+            const total = correctCount + wrongCount; const percent = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+            document.getElementById('result-percent').innerText = `${percent}%`;
+            document.getElementById('res-total').innerText = `${total}/50`; document.getElementById('res-correct').innerText = correctCount;
+            document.getElementById('result-circle').style.background = `conic-gradient(var(--success) ${percent}%, #334155 ${percent}%)`;
+        }
+
+        function restartTest() {
+            document.getElementById('screen-result').classList.add('hidden'); document.getElementById('screen-start').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
