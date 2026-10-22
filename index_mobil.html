@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>FXPro Master Compact Portal (Mobil)</title>
+    <title>FXPro Master Compact Portal</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
@@ -14,17 +14,18 @@
             --text-muted: #9ca3af;
             --accent-blue: #3b82f6;
             --accent-green: #10b981;
+            --accent-gold: #f59e0b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: '-apple-system', 'SF Pro Text', 'Inter', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            
+            padding: 20px;
             padding-top: calc(20px + env(safe-area-inset-top));
             padding-bottom: calc(20px + env(safe-area-inset-bottom));
             padding-left: calc(20px + env(safe-area-inset-left));
@@ -34,11 +35,15 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 32px 24px;
-            max-width: 500px;
+            padding: 40px 32px;
+            max-width: 520px;
             width: 100%;
             text-align: center;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transition: border-color 0.3s ease;
+        }
+        .portal-card:hover {
+            border-color: #4b5563;
         }
         .logo-area {
             font-size: 24px;
@@ -50,30 +55,38 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
-        .logo-area span {
+        .logo-area span.gradient-text {
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .mobile-badge {
+        .device-badge {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-green);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 20px;
             display: inline-block;
             vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+        .device-badge.mode-mobile {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .device-badge.mode-pc {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
         .subtitle {
             font-size: 12px;
             color: var(--text-muted);
-            margin-bottom: 24px;
+            margin-bottom: 28px;
             text-transform: uppercase;
             letter-spacing: 1px;
             line-height: 1.4;
@@ -82,8 +95,8 @@
             background-color: #0a0e17;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
+            padding: 18px;
+            margin-bottom: 28px;
             text-align: left;
             font-size: 13px;
         }
@@ -93,7 +106,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .info-row:last-child { margin-bottom: 0; }
         .info-label { color: var(--text-muted); flex-shrink: 0; }
@@ -128,27 +141,29 @@
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
         }
 
+        /* Kis felbontású kijelzők finomhangolása (Mobil) */
         @media (max-width: 480px) {
             body {
+                padding: 12px;
                 padding-top: calc(12px + env(safe-area-inset-top));
                 padding-bottom: calc(12px + env(safe-area-inset-bottom));
                 padding-left: calc(12px + env(safe-area-inset-left));
                 padding-right: calc(12px + env(safe-area-inset-right));
             }
             .portal-card {
-                padding: 24px 16px;
+                padding: 28px 18px;
             }
             .logo-area {
-                font-size: 22px;
+                font-size: 21px;
             }
             .info-box {
-                padding: 12px;
+                padding: 14px;
             }
             .info-row {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 4px;
-                margin-bottom: 12px;
+                margin-bottom: 14px;
             }
             .info-value {
                 text-align: left;
@@ -160,10 +175,10 @@
 <body>
     <div class="portal-card">
         <div class="logo-area">
-            FXPro <span>Master Compact</span>
-            <span class="mobile-badge">mobil</span>
+            FXPro <span class="gradient-text" id="dynamic-title-part">Master Portal</span>
+            <span id="dynamic-badge" class="device-badge">Detektálás...</span>
         </div>
-        <div class="subtitle">Automatizált Kereskedési Riportrendszer</div>
+        <div class="subtitle" id="dynamic-subtitle">Automatizált Kereskedési Rendszer</div>
         
         <div class="info-box">
             <div class="info-row">
@@ -176,7 +191,7 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Index frissítve (Helyi):</span>
-                <span class="info-value">2026-10-21 23:13:06</span>
+                <span class="info-value">2026-10-22 20:58:07</span>
             </div>
             <div class="info-row">
                 <span class="info-label">GitHub Repository:</span>
@@ -186,7 +201,38 @@
             </div>
         </div>
 
-        <a href="fxpro_teljes_piaci_riport.html" class="btn-enter">Belépés a Teljes Piaci Riporthoz</a>
+        <a href="fxpro_teljes_piaci_riport_mobil.html" class="btn-enter" id="dynamic-btn-text">Belépés a Teljes Piaci Riporthoz</a>
     </div>
+
+    <!-- 👑 Intelligens Hibrid Kliensoldali Eszközdetektáló -->
+    <script>
+        function adjustPortalForDevice() {
+            const titlePart = document.getElementById('dynamic-title-part');
+            const badge = document.getElementById('dynamic-badge');
+            const subtitle = document.getElementById('dynamic-subtitle');
+            const btnText = document.getElementById('dynamic-btn-text');
+
+            if (window.innerWidth < 768) {
+                // 📱 Mobil felbontás beállításai
+                document.title = "FXPro Master Compact Portal (Mobil)";
+                titlePart.textContent = "Master Compact";
+                badge.textContent = "mobil";
+                badge.className = "device-badge mode-mobile";
+                subtitle.textContent = "Automatizált Kereskedési Riportrendszer";
+                btnText.textContent = "Belépés a Mobil Riporthoz";
+            } else {
+                // 🖥️ PC monitor felbontás beállításai
+                document.title = "FXPro Master Analytics Portal (Asztali)";
+                titlePart.textContent = "Analytics Portal";
+                badge.textContent = "monitor";
+                badge.className = "device-badge mode-pc";
+                subtitle.textContent = "Intézményi Szintű Statisztikai Vezérlőpult";
+                btnText.textContent = "Megnyitás Nagy Képernyőn";
+            }
+        }
+        // Futtatás betöltéskor és az ablak átméretezésekor is azonnal
+        window.addEventListener('load', adjustPortalForDevice);
+        window.addEventListener('resize', adjustPortalForDevice);
+    </script>
 </body>
 </html>
