@@ -3,33 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktív Tanuló Teszt</title>
+    <title>Komplex Biztonságtechnikai és Informatikai Teszt</title>
     <style>
-        :root { --primary: #2b5c8f; --primary-hover: #1e436d; --bg: #f4f7f6; --card-bg: #ffffff; --text: #333333; --success: #28a745; --danger: #dc3545; }
+        :root { 
+            --primary: #2b5c8f; 
+            --primary-hover: #1e436d; 
+            --bg: #f4f7f6; 
+            --card-bg: #ffffff; 
+            --text: #333333; 
+            --success: #28a745; 
+            --danger: #dc3545; 
+            --trick: #d9534f; 
+            --trick-hover: #max. 12 cm; 
+        }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .container { max-width: 800px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { color: var(--primary); text-align: center; margin-bottom: 30px; }
         .progress-bar { background-color: #e9ecef; border-radius: 8px; overflow: hidden; margin-bottom: 25px; }
         .progress { height: 10px; background-color: var(--primary); width: 0%; transition: width 0.3s ease; }
-        .quiz-box { display: block; }
+        .quiz-box { display: none; }
+        .start-box { display: block; text-align: center; }
         .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
         .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .option-btn { background-color: #f8f9fa; border: 2px solid #dee2e6; padding: 14px 20px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s ease; }
+        .option-btn { background-color: #f8f9fa; border: 2px solid #dee2e6; padding: 14px 20px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s ease; width: 100%; }
         .option-btn:hover:not([disabled]) { background-color: #e9ecef; border-color: #adb5bd; }
         .option-btn.correct { background-color: #d4edda !important; border-color: var(--success) !important; color: #155724; font-weight: bold; }
         .option-btn.wrong { background-color: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
-        .next-btn { display: none; background-color: #ffc107; color: #212529; border: none; padding: 12px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; text-align: center; transition: background-color 0.2s; }
+        .next-btn { display: none; background-color: #ffc107; color: #212529; border: none; padding: 15px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; text-align: center; transition: background-color 0.2s; margin-top: 10px; }
         .next-btn:hover { background-color: #e0a800; }
+        .mode-btn { background-color: var(--primary); color: white; border: none; padding: 15px 25px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 8px; width: 80%; transition: background-color 0.2s; }
+        .mode-btn:hover { background-color: var(--primary-hover); }
+        .mode-btn.trick-btn { background-color: var(--trick); }
+        .mode-btn.trick-btn:hover { background-color: var(--trick-hover); }
         .result-box { display: none; text-align: center; }
         .score-text { font-size: 2.5rem; font-weight: bold; color: var(--primary); margin: 20px 0; }
         .percentage { font-size: 1.5rem; margin-bottom: 30px; }
         .restart-btn { background-color: var(--primary); color: white; border: none; padding: 15px 35px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
         .restart-btn:hover { background-color: var(--primary-hover); }
+        .theme-container { text-align: left; max-width: 500px; margin: 0 auto 30px auto; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; }
+        .theme-title { font-weight: bold; margin-bottom: 10px; color: var(--primary); border-bottom: 2px solid #dee2e6; padding-bottom: 5px; }
+        .theme-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #dee2e6; }
+        .theme-item:last-child { border-bottom: none; }
+        .theme-count { font-weight: bold; color: #666; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 id="main-title">Munkavédelmi és Informatikai Teszt</h1>
+    <h1 id="main-title">Komplex Biztonságtechnikai és Informatikai Teszt</h1>
+    
+    <div id="start-section" class="start-box">
+        <div class="theme-container">
+            <div class="theme-title">📚 Elérhető témakörök és kérdések:</div>
+            <div id="theme-list"></div>
+        </div>
+        <p class="question-text">Kérjük, válaszd ki a játékmódot:</p>
+        <button class="mode-btn trick-btn" onclick="selectMode('tricky')">🔥 Csak a Trükkös kérdések játszása</button>
+        <button class="mode-btn" onclick="selectMode('random50')">🎲 50 Véletlenszerű kérdés (vegyes)</button>
+        <button class="mode-btn" onclick="selectMode('all')">📚 Összes kérdés végigjátszása</button>
+    </div>
+
     <div id="quiz-section" class="quiz-box">
         <div class="progress-bar"><div id="progress" class="progress"></div></div>
         <div id="question-number" style="font-weight: bold; margin-bottom: 5px; color: #666;"></div>
@@ -37,134 +69,1253 @@
         <div id="options-container" class="options"></div>
         <button id="next-button" class="next-btn" onclick="nextQuestion()">Következő kérdés ➔</button>
     </div>
+    
     <div id="result-section" class="result-box">
         <h2>A teszt véget ért!</h2>
-        <p>Az Ön elért eredménye az 50 kérdésből:</p>
-        <div id="score" class="score-text">0 / 50</div>
+        <p>Az Ön elért eredménye:</p>
+        <div id="score" class="score-text">0 / 0</div>
         <div id="percent" class="percentage">0%</div>
-        <button class="restart-btn" onclick="startQuiz()">Újra (Újabb 50 véletlen kérdés)</button>
+        <button class="restart-btn" onclick="showStartScreen()">Vissza a főmenübe</button>
     </div>
 </div>
 <script>
+const themeStats = [
+    {
+        "name": "1. Rész: Munkajog és Alapok",
+        "count": 23
+    },
+    {
+        "name": "2. Rész: Munkabiztonság és Jelek",
+        "count": 24
+    },
+    {
+        "name": "3. Rész: Egészség, Védőeszköz, Alap-Info",
+        "count": 17
+    },
+    {
+        "name": "4. Rész: Hardver, Számrendszer, Hálózat",
+        "count": 28
+    },
+    {
+        "name": "🔥 Különleges: Trükkös és Haladó kérdések",
+        "count": 15
+    }
+];
 const originalQuestions = [
-    { q: "Mi a munkavédelem fogalma?", a: ["A szervezett munkavégzésre vonatkozó biztonsági és egészségügyi követelmények összessége", "Csak a gyárakban kötelező balesetvédelmi szabályok gyűjteménye", "A fizetett szabadságok kiadásának törvényi szabályozása"], correct: 0 },
-    { q: "A munkavédelem feladatkörébe a biztonságtechnikai és környezetvédelmi előírások mellett mely előírások betartása és betarttatása tartozik még?", a: ["A tűzvédelmi előírások", "A szoftverlicenc-előírások", "A könyvelési előírások"], correct: 0 },
-    { q: "A munkahely kialakításánál a munkahelyi környezet és a balesetvédelem mellett melyik terület tartozik még a munkavédelem főbb területei közé?", a: ["A tűzvédelem és környezetvédelem", "A hálózati és szervervédelem", "A vagyonvédelem és őrzés-védelem"], correct: 0 },
-    { q: "Milyen szabály vonatkozik a fűtőtestek és lámpatestek környezetére tűzveszélyes helyeken?", a: ["Robbanásveszélyes, éghető vagy gyúlékony dolgok nem tárolhatók a fűtőtestek közelében, és a lámpatestek nem érhetnek gyúlékony anyagokhoz", "A fűtőtestek közelében bármilyen anyag tárolható, ha a lámpák le vannak kapcsolva", "A lámpatesteknek kötelezően érintkezniük kell a gyúlékony anyagokkal a jobb hővezetés miatt"], correct: 0 },
-    { q: "Mi támogatja a munkavédelem követelményrendszerét?", a: ["Törvénykezési, szervezési és intézményi előírások rendszere", "Kizárólag a cégvezetők egyéni döntései", "Nemzetközi gazdasági alapítványok"], correct: 0 },
-    { q: "Mi a munkavédelem célja?", a: ["Biztonságos, egészséges, a dolgozók erejét és egészségét nem károsító munkakörülmények megvalósítása", "A profit maximális növelése a biztonság minimalizálásával", "A munkaidő minél hosszabbá tétele"], correct: 0 },
-    { q: "Mi a munkavédelem feladata a szabályok szintjén?", a: ["A biztonságtechnikai, tűzvédelmi és környezetvédelmi előírások betartása és betarttatása", "A könyvelési és adózási feladatok ellenőrzése", "A hirdetések és állásbörzék szervezése"], correct: 0 },
-    { q: "Melyek a munkavédelem főbb területei?", a: ["Munkabiztonság, foglalkozás-egészségügy, munkahelyi környezet, baleset-, tűz- és környezetvédelem", "Munkabér, szabadság és cafeteria menedzsment", "Adatvédelem, hálózati biztonság és szoftverfejlesztés"], correct: 0 },
-    { q: "Mit jelent a munkabiztonság?", a: ["Az egészséget nem veszélyeztető és biztonságos munkavégzésre vonatkozó szabályok megalkotása i9 s betartása", "A cég kapuinak fizikai zárva tartását", "A szerverek jelszavas védelmét"], correct: 0 },
-    { q: "Mi a foglalkozás-egészségügy feladata?", a: ["A munkakörnyezeti terhelések vizsgálata és a munkaköri egészségi alkalmasság megállapítása", "A táppénzes papírok utólagos hamisítása", "Ingyenes gyógyszerek osztása minden dolgozónak"], correct: 0 },
-    { q: "Melyek a munkavédelem jogi és igazgatási eszközei?", a: ["A kötelezettségeket rögzítő jogszabályok, az ellenőrző hatóságok és a felelősségre vonás", "A szóbeli dorgálások és prémium megvonások", "A céges szabályzatok belső elégetése"], correct: 0 },
-    { q: "Melyik törvény szabályozza az alapvető munkajogi kérdéseket Magyarországon?", a: ["A 2012. évi I. törvény (Munka Törvénykönyve - Mt.)", "Az Alkotmánybíróság 2000. évi határozata", "A 1993. évi Munkavédelmi Törvény önmagában"], correct: 0 },
-    { q: "Ki ellenőrzi a munkajogi szabályok betartását?", a: ["Az állam intézményei", "Kizárólag a szakszervezeti titkárok", "Nemzetközi auditorok évente egyszer"], correct: 0 },
-    { q: "Hogyan jön létre a munkaviszony?", a: ["Írásba foglalt munkaszerződés megkötésével", "Szóbeli megegyezéssel és kézfogással", "A munkahelyen való fizikai megjelenéssel"], correct: 0 },
-    { q: "Kik a munkaviszony alanyai?", a: ["A munkáltató és a munkavállaló", "A könyvelő és a HR menedzser", "A tulajdonos és az állami ellenőr"], correct: 0 },
-    { q: "Ki lehet munkáltató a Munka Törvénykönyve szerint?", a: ["Aki jogképes (természetes személy, jogi személy vagy jogi személyiséggel nem rendelkező társaság)", "Csak a 18 év feletti egyéni vállalkozók", "Kizárólag állami vállalatok és szövetkezetek"], correct: 0 },
-    { q: "Ki lehet munkavállaló?", a: ["Csak természetes személy", "Természetes és jogi személy egyaránt", "Bármilyen bejegyzett alapítvány"], correct: 0 },
-    { q: "Általános szabályként hányadik életév betöltésétől lehet munkaviszonyt létesíteni?", a: ["A 16. életév betöltésétől", "A 14. életév betöltésétől", "A 18. életév betöltésétől"], correct: 0 },
-    { q: "Milyen feltétellel létesíthet munkát egy 15. életévét betöltött tanuló?", a: ["Iskolai szünet alatt, nappali tagozatosként és a törvényes képviselő hozzájárulásával", "Bármikor az évben, ha az iskolaigazgató megengedi", "Csak éjszakai műszakban, ha szülői kísérettel végzi"], correct: 0 },
-    { q: "Melyik NEM kötelező tartalmi eleme a munkaszerződésnek?", a: ["A céges autó típusa és színe", "A munkakör és a munkabér", "A munkavégzés helye és a munkába lépés időpontja"], correct: 0 },
-    { q: "Legfeljemy mennyi lehet a próbaidő tartama?", a: ["Maximum 3 hónap", "Maximum 6 hónap", "Maximum 1 hónap"], correct: 0 },
-    { q: "Melyik szervezet segít ingyenesen a munkahelykeresésben?", a: ["Munkaügyi Hivatalok / Központok / FIT", "Magán-fejvadász ügynökségek", "Kizárólag az Európai Unió Bírósága"], correct: 0 },
-    { q: "Mi az EURES célja?", a: ["Az EU országai közötti munkaerő-áramlás elősegítése", "A számítógépes vírusok kiirtása az irodákból", "A fűtési rendszerek szabványosítása"], correct: 0 },
-    { q: "Évente körülbelül hányan veszítik életüket munkahelyi balesetben az EU-ban?", a: ["Több mint 5500 ember", "Körülbelül 500 ember", "Pontosan 159 000 ember"], correct: 0 },
-    { q: "Mekkora költséggel terhelik a munkával kapcsolatos megbetegedések és balesetek az EU gazdaságát?", a: ["490 milliárd EUR-val", "159 milliárd EUR-val", "10 milliárd EUR-val"], correct: 0 },
-    { q: "Mi a megelőzés végső célja a munkavédelemben?", a: ["A munkahelyi balesetek és foglalkozási megbetegedések csökkentése és felszámolása", "A biztosítási díjak elkerülése jogi kiskapukkal", "A munkavállalók folyamatos otthon tartása"], correct: 0 },
-    { q: "Kit terhel az elsődleges felelősség a kockázatok megelőzésében?", a: ["A felsővezetőket és a munkáltatókat", "Kizárólag a takarítószemélyzetet", "A Munkaügyi Hivatal külső ellenőrét"], correct: 0 },
-    { q: "Melyik a kockázatmegelőzés egyik alapelve?", a: ["Helyettesítse a veszélyest veszélytelennel vagy kevésbé veszélyessel", "A kockázatokat mindig a folyamat legvégén kezelje", "Az egyéni védelmet részesítse előnyben a csoportossal szemben"], correct: 0 },
-    { q: "A védekezés során melyik élvez elsőbbséget?", a: ["A csoportos védőintézkedések az egyénivel szemben", "Az egyéni védőintézkedések a csoportossal szemben", "Mindkettő teljesen egyenrangú minden helyzetben"], correct: 0 },
-    { q: "Kötelező-e a munkáltatónak konzultálnia a dolgozókkal az egészségvédelemről?", a: ["Igen, kötelesek konzultációt folytatni a dolgozókkal vagy képviselőikkel", "Nem, ez egy opcionális lehetőség", "Csak akkor, ha halálos baleset történt"], correct: 0 },
-    { q: "Ki határozza meg a munkahely kialakításának tárgyi feltételeit?", a: ["Jogszabályok, szabványok és egyéb műszaki előírások", "Kizárólag a belső lakberendező dizájnterve", "A legidősebb munkavállaló tapasztalata"], correct: 0 },
-    { q: "Milyen követelmény vonatkozik a munkahelyi padozatra?", a: ["Egyenletes, könnyen tisztítható és még nedvesen se csússzon", "Fényesre csiszolt, tükröződő és csúszós legyen", "Bármilyen anyag jó, ha olcsó volt"], correct: 0 },
-    { q: "Hogyan kell kinyílnia a szabadba vezető ajtónak?", a: ["Mindig kifelé kell nyílnia", "Mindig befelé kell nyílnia", "Csak tolóajtó lehet"], correct: 0 },
-    { q: "Milyen magas korláttal kell ellátni a lépcsőt, ha 0,8 méternél magasabb szintet köt össze?", a: ["Legalább 1 méter magas korláttal, max. 12 cm-es rácsnyílással", "Legalább 2 méter magas korláttal, rácsok nélkül", "Fél méteres korlát is elegendő"], correct: 0 },
-    { q: "Legfeljebb mekkora lehet a lépcsők magassága a munkahelyen?", a: ["Nem lehet több 17 cm-nél", "Nem lehet több 25 cm-nél", "Pontosan 10 cm-nek kell lennie"], correct: 0 },
-    { q: "Mi határozza meg a munkahelyi világítás típusát?", a: ["A munkavégzés módja", "A cégvezető aktuális hangulata", "A falak festésének színe"], correct: 0 },
-    { q: "Mit jelent a kék biztonsági szín?", a: ["Rendelkezés, kötelező előírás", "Tiltás vagy veszély", "Figyelmeztetés a veszélyre"], correct: 0 },
-    { q: "Mit jelent a vörös/piros biztonsági szín?", a: ["Tiltás, veszély, vagy tűzvédelmi eszköz", "Figyelmeztetés", "Vészkijárat, elsősegély"], correct: 0 },
-    { q: "Milyen alakú és színű a FIGYELMEZTETŐ jel?", a: ["Háromszög alakú, sárga alapon fekete piktogram fekete szegéllyel", "Kör alakú, kék alapon fehér piktogram", "Négyzet alakú, zöld alapon fehér piktogram"], correct: 0 },
-    { q: "Mit jelent a zöld biztonsági szín?", a: ["Vészkijárat, menekülési útvonal, elsősegély, veszélymentesség", "Kötelező rendelkezés", "Robbanásveszélyes légkör"], correct: 0 },
-    { q: "Milyen a TILTÓ jel geometriai megjelenése?", a: ["Kör alakú, fehér alapon fekete piktogram vörös szegéllyel, ferdén áthúzva", "Háromszög alakú, sárga alapon fekete piktogram", "Kör alakú, kék alapon fehér piktogram"], correct: 0 },
-    { q: "Milyen hangjelzést alkalmaznak menekülésre felszólításkor?", a: ["Folyamatos hangjelzést", "Szakaszosan villogó dallamot", "Rövid, másodpercenként megszakadó sípolást"], correct: 0 },
-    { q: "Milyen csoportokba sorolhatók a foglalkozási megbetegedések eredetük szerint?", a: ["Fizikai, kémiai és biológiai eredetűek", "Szoftveres, hardveres és hálózati eredetűek", "Gazdasági, morális és szociális eredetűek"], correct: 0 },
-    { q: "Melyek a fizikai eredetű megbetegedési tényezők?", a: ["Zaj, vibráció, por, sugárzások, hő- és hidegártalom", "Mérgező gázok és növényvédő szerek", "Baktériumok, vírusok és gombák"], correct: 0 },
-    { q: "Hogyan kerülhetnek be a kémiai anyagok a szervezetbe?", a: ["Bőrön át, a légutakon vagy az emésztőrendszeren keresztül", "Csak a fülön keresztül", "Kizárólag közvetlen injekcióval"], correct: 0 },
-    { q: "Milyen lefolyásúak lehetnek a biológiai eredetű megbetegedések?", a: ["Akut, krónikus, látens, karcinogén vagy mutagén", "Csak azonnali halált okozóak", "Kizárólag tünetmentesek"], correct: 0 },
-    { q: "Adhat-e a munkáltató pénzbeli megváltást a biztonságos munkavégzés követelményeinek teljesítése helyett?", a: ["Nem, pénzbeli vagy egyéb megváltást nem adhat", "Igen, ha a dolgozó írásban kéri a pótlékot", "Igen, veszélyes munkakörökben ez kötelező"], correct: 0 },
-    { q: "Megtagadhatja-e a munkavállaló a munkát, ha nem biztosítják az egyéni védőeszközt?", a: ["Igen, megtagadhatja a munkavégzést", "Nem, a munkát el kell végezni, és utólag kell panaszt tenni", "Csak akkor, ha a szakszervezet engedélyezi"], correct: 0 },
-    { q: "Hány kategóriája van az egyéni védőeszközöknek a védelmi szint alapján?", a: ["3 kategória", "5 kategória", "2 kategória"], correct: 0 },
-    { q: "Melyik kategóriába tartoznak a komplex tervezésű, halálos veszély ellen védő eszközök?", a: ["3. kategória", "1. kategória", "2. kategória"], correct: 0 },
-    { q: "Mi az 'információ' definíciója az informatikában?", a: ["Értelmezett adat / olyan új ismeret, ami bizonytalanságot szüntet meg", "Bármilyen számhalmaz, amit a gép kiír", "Egy elküldött e-mail fizikai mérete"], correct: 0 },
-    { q: "Mi az 'adat' fogalma?", a: ["Elemi ismeret, tények/fogalmak megjelenési formája, ami feldolgozásra alkalmas", "Az információ megértett, hasznosított formája", "A kódolási folyamat végeredménye"], correct: 0 },
-    { q: "Mi a 'kód'?", a: ["Megállapodás szerinti jelek vagy szimbólumok rendszere az információ megadására", "A számítógép elektromos feszültségszintje", "Egy titkos jelszó, amit senki sem ismerhet"], correct: 0 },
-    { q: "Milyen anyagnak nem szabad a fűtőtestek közelében lennie a munkahelyen?", a: ["Robbanásveszélyes, éghető vagy gyúlékony dolgoknak", "Fémeknek és kerámiáknak", "Csak az irodai papíroknak"], correct: 0 },
-    { q: "Milyen mértékegységben fejezik ki a hang erősségét a dokumentum szerint?", a: ["Decibelben (dB)", "Hertzben (Hz)", "Wattban (W)"], correct: 0 },
-    { q: "Hány helyen lehetséges az ipari zaj csökkentése?", a: ["Három helyen: a forrásnál, a térben és az érzékelőnél", "Két helyen: csak a gépben és a fülben", "Egy helyen: kizárólag a falakon"], correct: 0 },
-    { q: "Milyen anyaggal töltik ki a zajforrás köré emelt összetett burkolatokat?", a: ["Kőzetgyapottal", "Betonnal", "Műanyag habbal"], correct: 0 },
-    { q: "Körülbelül mekkora tompítást (dB) lehet elérni a zajforrás befedésével?", a: ["10-20 dB-es tompítást", "50-60 dB-es tompítást", "Mindent teljesen elnémít (100 dB)"], correct: 0 },
-    { q: "Mivel korlátozható a közvetlenül terjedő hang?", a: ["A forrás és az érzékelő közé állított akadállyal", "A világítás lekapcsolásával", "A gépek gyakoribb olajozásával"], correct: 0 },
-    { q: "Milyen anyagokkal csökkenthető a közvetve terjedő hang?", a: ["Hangelnyelő anyagokkal (akusztikai mennyezetek, válaszfalak)", "Fényes fémlemezekkel", "Egyszerű üvegablakokkal"], correct: 0 },
-    { q: "Milyen rezgéseket különböztetünk meg egészségkárosító hatásuk szerint?", a: ["Kisfrekvenciás (csont/ízület károsító) és nagyfrekvenciás (érgörcsöt okozó)", "Csak a fület károsító rezgéseket", "Hardveres és szoftveres rezgéseket"], correct: 0 },
-    { q: "Hogyan kell elhelyezni a rezgésártalmat okozó gépeket a munkahelyen?", a: ["Külön kell őket telepíteni", "Közvetlenül az étkező mellé kell rakni", "A padozat legpuhább részére kell tenni"], correct: 0 },
-    { q: "Melyik NEM tartozik a látható fény hullámhosszától eltérő elektromágneses sugárzások közé?", a: ["A monitor kék fénye", "Infravörös, ultraibolya, lézer", "Röntgen és radioaktív sugárzás"], correct: 0 },
-    { q: "Kik tartózkodhatnak a sugárzásnak kitett munkahelyi területeken?", a: ["Csak az arra a munkahelyre kioktatott munkavállalók a megfelelő védőeszközzel", "Bármelyik látogató vagy ügyfél", "Kizárólag a cégvezető engedély nélkül"], correct: 0 },
-    { q: "Melyik NEM a munkavállaló személyi feltétele a munkavégzéshez?", a: ["Saját tulajdonú számítógép megléte", "Megfelelő élettani adottságok, életkor és egészségi alkalmasság", "Szükség esetén pályaalkalmassági vizsgálat és szakképesítés"], correct: 0 },
-    { q: "Milyen típusú orvosi alkalmassági vizsgálatokat különít el a szöveg?", a: ["Előzetes, időszakos, soron kívüli és záró vizsgálat", "Csak belgyógyászati és szemészeti vizsgálat", "Kizárólag jogosítvány-hosszabbítási vizsgálat"], correct: 0 },
-    { q: "Melyik rendelet határozza meg az egészségügyi alapkövetelményeket a szövegben?", a: ["A 33/1998. (VI.24.) NM rendelet", "A 2012. évi I. törvény közvetlenül", "A 1993. évi EU direktíva"], correct: 0 },
-    { q: "Milyen feltételek együttes teljesülése kell a biológiai fertőzés létrejöttéhez?", a: ["Alkalmas kórokozó, a fertőzés terjesztője és egy fogékony szervezet", "Csak a hideg időjárás és a piszkos padozat", "Egy elavult számítógépes vírus és egy fertőzött pendrive"], correct: 0 },
-    { q: "Mit köteles a munkáltató biztosítani az egészségügyi feltételek részeként minden dolgozónak?", a: ["Megfelelő mennyiségű és minőségű ivóvizet, öltözködési és étkezési lehetőséget", "Ingyenes meleg ételt és kávét naponta háromszor", "Saját irodát és klímaberendezést"], correct: 0 },
-    { q: "Mikor kell veszély esetén a munkavégzést kötelezően beszüntetni?", a: ["Azonnal, amint a veszélyhelyzet fennáll", "Csak a műszak végén, ha nem javul a helyzet", "Ha az állami ellenőr írásban elrendeli"], correct: 0 },
-    { q: "Mit kell igazolnia a munkavállalónak az aláírásával az egyéni védőeszközök kapcsán?", a: ["Az eszköz átvételét, valamint a használatának oktatását, gyakorlását", "A munkaszerződés felbontását", "A napi ledolgozott munkaóráit"], correct: 0 },
-    { q: "Szabad-e egyéni védőeszközt írásbeli engedély nélkül elvinni a munkahelyről?", a: ["Nem, szigorúan tilos elvinni", "Igen, a dolgozó saját tulajdonává válik", "Csak hétvégén megengedett"], correct: 0 },
-    { q: "Melyik kategóriájú védőeszköznél vélelmezi a gyártó, hogy a felhasználó maga is képes megítélni a védelmi szintet?", a: ["1. kategória (kis védelmi szintű, egyszerű eszközök)", "3. kategória (komplex tervezésű eszközök)", "2. kategória"], correct: 0 },
-    { q: "Hány fokos felületi hőmérsékletig tartozik a tárgyak kezelése az 1. kategóriájú védőeszközök alá?", a: ["Az 50°C-t nem meghaladó tárgyakig", "A 100°C feletti tárgyakig", "Pontosan 0°C alatti tárgyakig"], correct: 0 },
-    { q: "Melyik eszköz tartozik egyértelműen a 2. kategóriájú védőeszközök közé?", a: ["Minden védősisak (sportsisak is), arcvédők, szemvédők és hallásvédők", "A papírmaszkok és a kertészkesztyűk", "A búvárkészülékek és a tűzoltósisakok"], correct: 0 },
-    { q: "Milyen környezeti levegő-hőmérséklet felett számít egy eszköz a 3. kategóriába (hőhatás elleni védelem)?", a: ["Amely eléri vagy meghaladja a 100°C-ot", "Amely eléri a 40°C-ot", "Pontosan 50°C-os hőmérsékletnél"], correct: 0 },
-    { q: "A munkavédelmi szabályok szerint mekkora feszültség számít már veszélyesnek váltakozó áram esetén?", a: ["Az 50 V és az ezt meghaladó értékek", "A 12 V feletti értékek", "Csak a 230 V feletti hálózati feszültség"], correct: 0 },
-    { q: "Melyik nyelv NEM szerepel példaként a számítógépek által ismert kódnyelvek (programnyelvek) között?", a: ["HTML/CSS", "BASIC, LOGO", "Java, Pascal"], correct: 0 }
+    {
+        "q": "Mi a munkavédelem pontos definíciója a dokumentum alapján?",
+        "a": [
+            "A szervezett munkavégzésre vonatkozó biztonsági és egészségügyi követelmények összessége",
+            "A gyárakban alkalmazott anyagi kártérítési felelősségvállalások gyűjteménye",
+            "Az éves fizetett szabadságok kiadásának és elszámolásának törvényi rendszere"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen rendszerek támogatják a munkavédelem követelményrendszerét?",
+        "a": [
+            "Törvénykezési, szervezési és intézményi előírások rendszere",
+            "Kizárólag a vállalatvezetők egyéni és tetszőleges döntései",
+            "Kizárólag nemzetközi gazdasági alapítványok pénzügyi ajánlásai"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a munkavédelem végső célkitűzése a diák szövege szerint?",
+        "a": [
+            "A biztonságos, egészséges, a munkavállalók erejét és egészségét nem károsító munkakörülmények megvalósítása",
+            "A vállalati profit maximalizálása a biztonsági kiadások minimalizálásával",
+            "A napi munkaidő maximális meghosszabbítása a magasabb termelésért"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a munkavédelem kifejezett feladata a szabályozás szintjén?",
+        "a": [
+            "A biztonságtechnikai, a tűzvédelmi és a környezetvédelmi előírások, követelmények betartása és betarttatása",
+            "A könyvelési, adózási és belső céges adminisztrációs folyamatok felügyelete",
+            "A vállalati marketing, reklámtevékenység és állásbörzék koordinálása"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyek a munkavédelem főbb területei a dokumentum nevesítése szerint?",
+        "a": [
+            "Munkabiztonság, foglalkozás-egészségügy, munkahelyi környezet kialakítása, baleset-, tűz- és környezetvédelem",
+            "Munkabér-elszámolás, éves szabadságolási keret és cafeteria-menedzsment",
+            "Adatvédelem, informatikai hálózatbiztonság és szoftverfejlesztési módszertanok"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit takar a munkabiztonság fogalma a diák alapján?",
+        "a": [
+            "Az egészséget nem veszélyeztető és biztonságos munkavégzésre vonatkozó szabályok megalkotása, betarttatása és betartása",
+            "A vállalati telephelyek fizikai őrzés-védelmét és a beléptetőkapuk kezelését",
+            "A számítógépes hálózatok és központi szerverek jelszavas védelmének kiépítését"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a foglalkozás-egészségügy feladatköre?",
+        "a": [
+            "A munkakörnyezeti kóroki tényezők okozta terhelések vizsgálata és a munkaköri egészségi alkalmasság megállapítása, ellenőrzése",
+            "A táppénzes igazolások és orvosi papírok utólagos vállalati adminisztrációja",
+            "Ingyenes gyógyszerek és egészségügyi csomagok kiosztása minden munkavállalónak"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyek a munkavédelem jogi és igazgatási eszközei?",
+        "a": [
+            "A kötelezettségeket rögzítő jogszabályok, a végrehajtást ellenőrző hatósági szervezet és a felelősségre vonás",
+            "A szóbeli dorgálások és az év végi prémiumok indoklás nélküli megvonása",
+            "A belső vállalati működési szabályzatok megsemmisítése és elégetése"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik jogszabály határozza meg az alapvető munkajogi kérdéseket Magyarországon?",
+        "a": [
+            "A 2012. évi I. törvény (Munka Törvénykönyve - Mt.)",
+            "Az Alkotmánybíróság 2000. évi eseti és egyedi állásfoglalása",
+            "A 1993. évi Munkavédelmi Törvény önmagában, módosítások nélkül"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Ki ellenőrzi a munkajogi szabályok betartását a diák szerint?",
+        "a": [
+            "Az állam intézményei",
+            "Kizárólag a független szakszervezeti bizalmi tagok és képviselők",
+            "Nemzetközi auditor cégek képviselői évente egyszer"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hogyan jön létre szabályosan a munkaviszony?",
+        "a": [
+            "A munkavállaló és a munkáltató között megkötött, írásba foglalt munkaszerződéssel",
+            "Szóbeli megegyezéssel, kézfogással és a bérben való megegyezéssel",
+            "A munkahelyen történő fizikai megjelenéssel és a munka azonnali megkezdésével"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Kik a munkaviszony alanyai a Munka Törvénykönyve alapján?",
+        "a": [
+            "A munkáltató és a munkavállaló",
+            "A vállalati könyvelő és a humánerőforrásért felelős HR menedzser",
+            "A cég többségi tulajdonosa és az állami adóellenőr"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Ki töltheti be a munkáltató szerepét?",
+        "a": [
+            "Aki jogképes (természetes személy, jogi személy vagy jogi személyiséggel nem rendelkező társaság)",
+            "Kizárólag a 18. életévét betöltött egyéni vállalkozó magánszemély",
+            "Kizárólag az állami tulajdonú vállalatok és a bejegyzett szövetkezetek"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Ki vagy mi lehet munkavállaló a törvény szerint?",
+        "a": [
+            "Kizárólag természetes személy",
+            "Természetes személy és bejegyzett jogi személy egyaránt",
+            "Bármilyen bíróságilag nyilvántartásba vett alapítvány"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Általános szabályként hányadik életév betöltésétől létesíthető munkaviszony?",
+        "a": [
+            "A 16. életév betöltésétől",
+            "A 14. életév betöltésétől",
+            "A 18. életév betöltésétől"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen feltételek mellett létesíthet munkát egy 15. életévét betöltött tanuló?",
+        "a": [
+            "Iskolai szünet alatt, nappali tagozatosként és a törvényes képviselő hozzájárulásával",
+            "Az év bármely szakaszában, amennyiben az iskola igazgatója írásban engedélyezi",
+            "Csak éjszakai műszakban, ha szülői kíséret áll rendelkezésre"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyek a munkaszerződés kötelező tartalmi elemei a leírás szerint?",
+        "a": [
+            "Időtartam, munkába lépés napja, próbaidő, munkavégzés helye, munkakör, munkabér, munkaidő",
+            "A biztosított céges autó típusa, színe és az éves prémiumok kifizetési napja",
+            "A munkaruházat márkája és a menzai étkezési utalványok havi mennyisége"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Legfeljebb mennyi lehet a próbaidő tartama a munkaszerződés megkötésekor?",
+        "a": [
+            "Maximum 3 hónap",
+            "Maximum 6 hónap",
+            "Maximum 1 hónap"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mely szervezetek nyújtanak komplex és ingyenes segítséget a munkahelykereséshez?",
+        "a": [
+            "Munkaügyi Hivatalok, Központok és Foglalkozási Információs Tanácsadók (FIT)",
+            "Magán-fejvadász és HR-tanácsadó ügynökségek",
+            "Kizárólag az Európai Unió luxemburgi Bírósága"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi az Európai Foglalkozási Szolgálat (EURES) kifejezett célja?",
+        "a": [
+            "Az EU országai közötti munkaerő-áramlás elősegítése",
+            "A számítógépes vírusok és kártevők kiirtása a közigazgatási gépekről",
+            "A központi fűtési rendszerek európai szintű egységesítése"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Évente körülbelül hányan veszítik életüket munkahelyi balesetben az Európai Unióban?",
+        "a": [
+            "Több mint 5500 ember",
+            "Körülbelül 500 ember",
+            "Pontosan 159 000 ember"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány ember hal meg évente munkával kapcsolatos megbetegedések miatt az EU-ban?",
+        "a": [
+            "159 000 ember",
+            "Több mint 5500 ember",
+            "Körülbelül 20 000 ember"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mekkora összköltséggel terhelik a munkával kapcsolatos balesetek és betegségek az EU gazdaságát?",
+        "a": [
+            "490 milliárd EUR-val",
+            "159 milliárd EUR-val",
+            "10 milliárd EUR-val"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a megelőzés végső célja a munkavégzéssel összefüggő kockázatok kezelésénél?",
+        "a": [
+            "A munkahelyi balesetek és foglalkozási megbetegedések számának csökkentése és felszámolása",
+            "A biztosítási díjak jogi kiskapukkal való csökkentése",
+            "A munkavállalók folyamatos otthoni munkavégzésben tartása"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Kit terhel az elsődleges felelősség a munkahelyi kockázatok megelőzésében?",
+        "a": [
+            "A felsővezetőket és a munkáltatókat",
+            "Kizárólag a takarító és karbantartó személyzetet",
+            "A Munkaügyi Hivatal külső ellenőreit"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik tartozik a kockázatmegelőzés nevesített alapelvei közé a diák szerint?",
+        "a": [
+            "A kockázatokat kezelje a forrásuknál és a munkát szabja az egyénre",
+            "A kockázatokat mindig a folyamat legvégén, az érzékelőnél kell kezelni",
+            "Az egyéni védelmet részesítse előnyben a csoportos védőintézkedésekkel szemben"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik intézkedés élvez elsőbbséget a kockázatmegelőzés elvei szerint?",
+        "a": [
+            "A csoportos védőintézkedések az egyéni védőintézkedésekkel szemben",
+            "Az egyéni védőintézkedések a csoportos védőintézkedésekkel szemben",
+            "Mindkét védelmi forma teljesen egyenrangú minden műszaki helyzetben"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Kötelező-e a munkáltatónak konzultálnia a dolgozókkal az egészségvédelemről és biztonságról?",
+        "a": [
+            "Igen, kötelesek konzultációt folytatni a dolgozókkal vagy képviselőikkel",
+            "Nem, ez egy opcionális vállalati kényelmi lehetőség",
+            "Csak abban az esetben, ha súlyos tömeges baleset történt"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi határozza meg a munkahely kialakításának tárgyi feltételeit a tervezéstől az üzemeltetésig?",
+        "a": [
+            "Jogszabályok, szabványok és egyéb műszaki előírások",
+            "Kizárólag a belsőépítész esztétikai dizájnterve",
+            "A legidősebb és legtapasztaltabb munkavállaló véleménye"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen követelmény vonatkozik a munkahelyi padozatra?",
+        "a": [
+            "Egyenletes, könnyen tisztítható legyen és ne csússzon még nedvesen se",
+            "Fényesre csiszolt, tükröződő és csúszós felületű legyen",
+            "Bármilyen anyag megfelelő, ha az építési költsége alacsony volt"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hogyan kell kinyílnia a szabadba vezető ajtónak a közlekedési szabályok szerint?",
+        "a": [
+            "Mindig kifelé kell nyílnia",
+            "Mindig befelé kell nyílnia",
+            "Kizárólag oldalra tolható automata ajtó lehet"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen korláttal kell ellátni a lépcsőt, ha az 0,8 méternél magasabb szintet köt össze?",
+        "a": [
+            "Legalább 1 méter magas korláttal, melynek rácsai között legfeljebb 12 cm nyílás lehet",
+            "Legalább 2 méter magas zárt korláttal, rácsnyílások nélkül",
+            "Fél méter magas korlát is elegendő bármilyen rácstávolsággal"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen esetben kell lépcsőpihenőt kialakítani a lépcsősorban?",
+        "a": [
+            "Ha a lépcső 1,8 méternél magasabb szintkülönbséget köt össze",
+            "Ha a lépcsőfokok száma egy szakaszban meghaladja az ötöt",
+            "Minden lépcsőnél kötelező 1 méteres magasságonként"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Legfeljebb mekkora lehet a lépcsők magassága a munkahelyen?",
+        "a": [
+            "Nem lehet több 17 cm-nél",
+            "Nem lehet több 25 cm-nél",
+            "Pontosan 10 cm-nek kell lennie mindenhol"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi határozza meg a munkahelyi világítás típusát és tulajdonságait?",
+        "a": [
+            "A munkavégzés módja",
+            "A cégvezető aktuális egyéni hangulata",
+            "A falak és a berendezések festésének alapszíne"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelent a vörös vagy piros biztonsági szín?",
+        "a": [
+            "Tiltás, veszély, vagy tűzvédelmi eszköz, anyag",
+            "Kötelező rendelkezés, előírás",
+            "Figyelmeztetés a fennálló veszélyre"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelent a sárga vagy borostyánsárga biztonsági szín?",
+        "a": [
+            "Figyelmeztetés",
+            "Tiltás vagy közvetlen veszély",
+            "Vészkijárat és elsősegélynyújtó hely"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelent a kék biztonsági szín?",
+        "a": [
+            "Rendelkezés, kötelező előírás",
+            "Tiltás vagy tűzvédelmi felszerelés",
+            "Veszélymentesség és szabad menekülési út"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelent a zöld biztonsági szín?",
+        "a": [
+            "Vészkijárat, menekülési útvonal, elsősegély, veszélymentesség",
+            "Kötelezően végrehajtandó rendelkezés",
+            "Robbanásveszélyes légkör jelenléte"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen geometriai alakú és színű a TILTÓ jel?",
+        "a": [
+            "Kör alakú, fehér alapon fekete piktogram vörös szegéllyel, ferdén áthúzva",
+            "Háromszög alakú, sárga alapon fekete piktogram fekete szegéllyel",
+            "Kör alakú, kék alapon fehér piktogram"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen geometriai alakú és színű a FIGYELMEZTETŐ jel?",
+        "a": [
+            "Háromszög alakú, sárga alapon fekete piktogram fekete szegéllyel",
+            "Kör alakú, kék alapon fehér piktogram",
+            "Négyzet vagy téglalap alakú, zöld alapon fehér piktogram"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen geometriai alakú és színű a RENDELKEZŐ jel?",
+        "a": [
+            "Kör alakú, kék alapon fehér piktogram",
+            "Háromszög alakú, sárga alapon fekete piktogram",
+            "Négyzet alakú, vörös alapon fehér piktogram"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen geometriai alakú és színű az ELSŐSEGÉLY vagy MENEKÜLÉSI jel?",
+        "a": [
+            "Téglalap vagy négyzet alakú, zöld alapon fehér piktogram",
+            "Kör alakú, fehér alapon vörös szegély",
+            "Háromszög alakú, sárga alapon fekete szegély"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelez a biztonsági világító jelnél a gyakoribb felvillanás?",
+        "a": [
+            "Nagyobb veszélyre utal",
+            "Azt, hogy a rendszer akkumulátora lemerülőben van",
+            "A normál üzemi működés kezdetét"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen hangjelzést kell alkalmazni a menekülésre felszólításkor?",
+        "a": [
+            "Folyamatos hangjelzést",
+            "Szakaszosan megszakadó sípolást",
+            "Dallamos, változó frekvenciájú hangot"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen követelmény vonatkozik a fűtőtestek környezetére a klíma elvárások alapján?",
+        "a": [
+            "Robbanásveszélyes, éghető vagy gyúlékony dolgok nem tárolhatók a közelükben",
+            "Bármilyen anyag tárolható mellettük, ha a berendezés burkolt",
+            "Kötelező gyúlékony anyagokat elhelyezni a jobb hőátadásért"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen elvárás vonatkozik a szellőztetés okozta légmozgásra?",
+        "a": [
+            "Egészségre káros légmozgás (huzat) ne legyen",
+            "A levegőnek folyamatosan nagy sebességgel kell áramolnia",
+            "A huzat megléte kötelező a por hatékony elszívásához"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen csoportokba sorolhatók a foglalkozási megbetegedések eredetük szerint?",
+        "a": [
+            "Fizikai, kémiai és biológiai eredetűek",
+            "Szoftveres, hardveres és hálózati eredetűek",
+            "Gazdasági, erkölcsi és szociális csoportok"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyek a fizikai eredetű megbetegedési tényezők a dokumentum szerint?",
+        "a": [
+            "Zaj, vibráció, por, túlnyomás, megterhelő fizikai munka, sugárzások, hő- és hidegártalom",
+            "Mérgező gázok, fémek, szerves oldószerek és növényvédő szerek",
+            "Baktériumok, vírusok, gombák, férgek és élősködők"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hogyan kerülhetnek be a kémiai vegyi anyagok a szervezetbe?",
+        "a": [
+            "Bőrön át, a légutakon vagy az emésztőrendszeren keresztül",
+            "Kizárólag a hallójáraton és a fülön keresztül",
+            "Csak közvetlen intravénás injekció útján"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen lefolyásúak lehetnek a biológiai eredetű megbetegedések?",
+        "a": [
+            "Akut (heveny), krónikus (idült), látens (lappangó), karcinogén vagy mutagén",
+            "Csak azonnali halált okozóak lehetnek",
+            "Kizárólag tünetmentesek és visszafordíthatatlanok"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Adhat-e a munkáltató pénzbeli megváltást a biztonságos munkavégzés követelményeinek teljesítése helyett?",
+        "a": [
+            "Nem, pénzbeli vagy egyéb megváltást a munkavállalónak nem adhat",
+            "Igen, amennyiben a munkavállaló ehhez írásban hozzájárul",
+            "Igen, kiemelten veszélyes munkakörökben ez jogszabályi előírás"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Megtagadhatja-e a munkavállaló a munkát, ha nem biztosítják az egyéni védőeszközt?",
+        "a": [
+            "Igen, megtagadhatja a munkavégzést",
+            "Nem, a munkát el kell végezni, és utólag kell panaszt tenni",
+            "Csak akkor, ha a munkaügyi bíróság előzetesen engedélyezi"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány kategóriája van az egyéni védőeszközöknek a védelmi szint alapján?",
+        "a": [
+            "3 kategória van",
+            "5 kategória van",
+            "2 kategória van"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik rendelet határozza meg az egészségügyi alapkövetelményeket a szövegben?",
+        "a": [
+            "A 33/1998. (VI.24.) NM rendelet",
+            "A 2012. évi I. törvény közvetlenül, mellékletek nélkül",
+            "A 1993. évi európai uniós direktíva"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen feszültség számít már veszélyesnek váltakozó áram (AC) esetén a dokumentum szerint?",
+        "a": [
+            "Az 50 V és az ezt meghaladó értékek",
+            "A 12 V feletti értékek",
+            "Csak a 230 V feletti hálózati feszültség"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen mértékegységben fejezik ki a hang erősségét a zajvédelemről szóló diák alapján?",
+        "a": [
+            "Decibelben (dB)",
+            "Hertzben (Hz)",
+            "Wattban (W)"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány helyen lehetséges az ipari zaj csökkentése a zajszint-csökkentés alapelvei szerint?",
+        "a": [
+            "Három helyen: a zaj forrásánál, a forrás és az érzékelő közti térben, valamint az érzékelőnél",
+            "Két helyen: kizárólag a gép belsejében és a munkavállaló fülében",
+            "Egy helyen: egyedül a terem külső falainak szigetelésével"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen anyaggal töltik ki a zajforrás köré emelt összetett szerkezetű burkolatokat?",
+        "a": [
+            "Kőzetgyapottal",
+            "Betonnal",
+            "Műanyag habbal és légbuborékokkal"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mivel korlátozható a közvetlenül terjedő hang a forrás és az érzékelő között?",
+        "a": [
+            "A forrás és az érzékelő közé állított akadállyal",
+            "A helyiség világításának lekapcsolásával",
+            "A gépek kenőanyagának gyakoribb cseréjével"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Milyen rezgéseket különböztetünk meg egészségkárosító hatásuk szerint a rezgésvédelemnél?",
+        "a": [
+            "Kisfrekvenciás (csont/ízület károsító) és nagyfrekvenciás (érgörcsöt okozó)",
+            "Csak a belső fület és a hallást károsító rezgéseket",
+            "Hardveres és szoftveres típusú digitális rezgéseket"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi az 'információ' definíciója a dokumentum szerint?",
+        "a": [
+            "Olyan új ismeret, amely megszerzője számára szükséges, korábbi tudása alapján értelmezhető és bizonytalanságot szüntet meg",
+            "Bármilyen strukturálatlan számhalmaz, amit a számítógép monitora kiír",
+            "Egy elküldött elektronikus levél fizikai, bájtokban mért mérete"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi az 'adat' fogalma az informatikai alapismeretekben?",
+        "a": [
+            "Elemi ismeret, tények/fogalmak olyan megjelenési formája, amely alkalmas értelmezésre, feldolgozásra",
+            "Az információ megértett, hosszú távon hasznosított formája",
+            "A kódolási folyamat legvégső és módosíthatatlan eredménye"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a 'kód' meghatározása a diák szerint?",
+        "a": [
+            "Megállapodás szerinti jelek vagy szimbólumok rendszere, mellyel valamely információ egyértelműen megadható",
+            "A számítógép alaplapján mérhető elektromos feszültségszint",
+            "Egy titkos jelszó, amelyet kizárólag a rendszergazda ismerhet"
+        ],
+        "isTricky": false
+    },
+    {
+        "q": "Melyik számrendszert használják a számítógépek az adatok belső tárolására és feldolgozására?",
+        "a": [
+            "Kettes (bináris) számrendszert",
+            "Tízes (decimális) számrendszert",
+            "Tizenhatos (hexadecimális) számrendszert"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hányféle számjegyet használ a tizenhatos (hexadecimális) számrendszer a számok leírására?",
+        "a": [
+            "16-félét (0-9 számjegyeket és az A-F betűket)",
+            "10-félét (0-9)",
+            "2-félét (0 és 1)"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a karakterkódolás (pl. ASCII vagy Unicode) alapvető szerepe az informatikában?",
+        "a": [
+            "Hogy a szöveges karaktereket (betűket, jeleket) egyértelmű számokká (kódokká) alakítsa a gép számára",
+            "Hogy a monitoron megjelenő képek felbontását és pixelszámát növelje",
+            "Hogy automatikusan tömörítse a merevlemezen tárolt fájlokat"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány biten kódolja a karaktereket a klasszikus ASCII kódrendszer?",
+        "a": [
+            "7 vagy 8 biten",
+            "16 biten",
+            "32 biten"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik kódolási szabvány képes a világ összes nyelvének karakterkészletét egységesen megjeleníteni?",
+        "a": [
+            "Unicode / UTF-8",
+            "ASCII",
+            "Baudot-kód"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik a modern számítógépek működését meghatározó egyik alapvető Neumann-elv?",
+        "a": [
+            "A gép legyen teljesen elektronikus működésű, és kettes számrendszert használjon",
+            "A programokat és az adatokat fizikailag teljesen különálló memóriákban kell tárolni",
+            "A számítógépnek nem szükséges belső vezérlőegységgel rendelkeznie"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit mond ki a Neumann-féle tárolt program elve?",
+        "a": [
+            "A program utasításai és a feldolgozandó adatok ugyanabban a belső memóriában helyezkednek el",
+            "A programokat csak külső háttértárolóról, beolvasás nélkül szabad futtatni",
+            "A számítógép memóriája kizárólag adatokat tárolhat, utasításokat nem"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik egység felelős a számítógépen belül az utasítások értelmezéséért és a végrehajtás koordinálásáért?",
+        "a": [
+            "A CPU (Központi Feldolgozó Egység) vezérlőegysége (CU)",
+            "A RAM (Operatív memória)",
+            "A tápegység feszültségszabályozója"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi az ALU (Aritmetikai és Logikai Egység) feladata a processzoron belül?",
+        "a": [
+            "Matematikai alapműveletek és logikai összehasonlítások végrehajtása",
+            "A processzor működése során keletkező hő elvezetése",
+            "A háttértárakról érkező adatok átmeneti, hosszú távú tárolása"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi jellemző a RAM (operatív memória) tartalmára a gép kikapcsolásakor?",
+        "a": [
+            "A benne tárolt adatok az áram megszűnésével teljesen elvesznek (illékony)",
+            "Az adatok véglegesen és módosíthatatlanul megőrződnek a következő indításig",
+            "Az operációs rendszer automatikusan átmásolja egy biztonsági külső szerverre"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a gyorsítótár (Cache) szerepe a processzor mellett?",
+        "a": [
+            "A CPU és a jóval lassabb RAM közötti sebességkülönbség áthidalása a gyakori adatok gyors elérésével",
+            "A számítógép merevlemezének szoftveres töredezettségmentesítése",
+            "A hálózaton keresztül érkező adatcsomagok hardveres szűrése és blokkolása"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a buszrendszer (adatbusz, címbusz, vezérlőbusz) feladata az alaplapon?",
+        "a": [
+            "A számítógép különböző hardveregységei közötti adat- és jelátvitel biztosítása",
+            "A hűtőventilátorok fordulatszámának dinamikus szabályozása",
+            "A tápegységből kiinduló egyenáram egyenletes szétosztása"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik eszköz tartozik a tisztán beviteli (input) perifériák közé?",
+        "a": [
+            "Billentyűzet, egér, szkenner",
+            "Monitor, nyomtató, hangszóró",
+            "Merevlemez, pendrive, hálózati kártya"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik eszköz minősül tisztán kiviteli (output) perifériának?",
+        "a": [
+            "Monitor, projektor, nyomtató",
+            "Billentyűzet, mikrofon, egér",
+            "Érintőképernyő, headset, modem"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik háttértár működik mozgó alkatrészek nélkül, tisztán félvezetős memóriaalapon?",
+        "a": [
+            "SSD (Solid State Drive)",
+            "HDD (Merevlemezes meghajtó)",
+            "CD-ROM (Optikai meghajtó)"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik szoftverkategóriába tartoznak az operációs rendszerek (pl. Windows, Linux)?",
+        "a": [
+            "Rendszerszoftverek",
+            "Alkalmazói szoftverek",
+            "Fejlesztői környezetek és fordítóprogramok"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a fájlrendszerek (pl. NTFS, FAT32) feladata az operációs rendszerben?",
+        "a": [
+            "A háttértárolókon lévő adatok logikai rendszerezése, tárolása és könyvtárszerkezetbe szervezése",
+            "A számítógépes vírusok automatikus felismerése és karanténba zárása",
+            "A törölt e-mailek visszaállítása a szerverről"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mit jelent a többfeladatos működés (multitasking) az operációs rendszereknél?",
+        "a": [
+            "A számítógép képes egy időben több program/folyamat párhuzamos futtatására",
+            "A gép egyszerre több monitorra képes képet kiküldeni hardveres váltás nélkül",
+            "Több felhasználó tud ugyanazzal az egérrel egy időben dolgozni"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány rétegből áll az informatikai hálózatok modellezésére használt elméleti OSI modell?",
+        "a": [
+            "7 rétegből",
+            "4 rétegből",
+            "5 rétegből"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány réteget határoz meg a gyakorlatban alkalmazott TCP/IP hálózati modell?",
+        "a": [
+            "4 réteget",
+            "7 réteget",
+            "3 réteget"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik hálózati topológiára jellemző, hogy minden munkaállomás egyetlen központi eszközhöz (pl. switch vagy hub) kapcsolódik?",
+        "a": [
+            "Csillag topológia",
+            "Sín (busz) topológia",
+            "Gyűrű topológia"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány bites egy szabványos IPv4 cím az informatikában?",
+        "a": [
+            "32 bites",
+            "64 bites",
+            "128 bites"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Hány bites az újabb generációs IPv6 címzési rendszer?",
+        "a": [
+            "128 bites",
+            "32 bites",
+            "16 bites"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Mi a feladata az alhálózati maszknak (subnet mask) az IP-címzés során?",
+        "a": [
+            "Meghatározza, hogy az IP-cím melyik része azonosítja a hálózatot és melyik a konkrét gépet",
+            "Teljesen titkosítja a hálózaton átmenő külső adatforgalmat",
+            "Átfordítja a weboldalak szöveges nevét számszerű IP-címekké"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik hálózati protokoll felelős a weboldalak letöltéséért és biztonságos átviteléért a böngészőnkbe?",
+        "a": [
+            "HTTP / HTTPS",
+            "FTP",
+            "SMTP"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik kiszolgáló (szerver) végzi a szöveges tartománynevek (pl. weboldal címe) IP-címmé alakítását?",
+        "a": [
+            "DNS (Domain Name System) szerver",
+            "DHCP szerver",
+            "FTP szerver"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik hálózati protokoll szolgál az elektronikus levelek (e-mailek) továbbítására és kiküldésére?",
+        "a": [
+            "SMTP",
+            "POP3",
+            "HTTP"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Melyik eszköz alkalmas két teljesen különböző hálózat (pl. a helyi otthoni hálózat és az Internet) összekapcsolására és a forgalom irányítására?",
+        "a": [
+            "Router (Útvonalválasztó)",
+            "Repeater (Jelismétlő)",
+            "Hub (Elosztó)"
+        ],
+        "correct": 0,
+        "isTricky": false
+    },
+    {
+        "q": "Egy munkahelyi lépcsősor 2 méter magas szintkülönbséget köt össze. Milyen kiegészítő elemekkel kell kötelezően ellátni a diák szerint?",
+        "a": [
+            "Legalább 1 méter magas korláttal (max. 12 cm rácsnyílással) ÉS egy lépcsőpihenővel",
+            "Kizárólag legalább 1 méter magas korláttal, pihenőre itt nincs szükség",
+            "Csak lépcsőpihenővel, mert korlátot csak 2,5 méter felett kötelező építeni"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Milyen feltétellel kötelezhető kártérítésre a munkavállaló, ha kárt okozott egy egyéni védőeszközben?",
+        "a": [
+            "Ha szándékosan vagy gondatlanul okozott kárt benne",
+            "Minden esetben, a természetes elhasználódás és kopás esetén is",
+            "Csak akkor, ha az eszköz értéke bizonyítottan meghaladja a 100 eurót"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Mely feszültségértékek számítanak hivatalosan VESZÉLYES feszültségnek váltakozó (AC) és egyenáram (DC) esetén?",
+        "a": [
+            "50 V vagy afölött váltakozó áramnál, illetve 75 V vagy afölött egyenáramnál",
+            "12 V felett váltakozó áramnál, illetve 24 V felett egyenáramnál",
+            "Kizárólag a 230 V feletti hálózati és ipari feszültségek"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Milyen anyagi vagy egyéb kompenzációt adhat a munkáltató a biztonságos munkavégzés követelményeinek teljesítése HELYETT?",
+        "a": [
+            "Semmilyen pénzbeli vagy egyéb megváltást nem adhat a munkavállalónak",
+            "Veszélyességi pótlékot adhat, ha a dolgozó írásban lemond a védőeszközről",
+            "Bármilyen egyéb cafeteria- juttatást vagy plusz szabadnapot biztosíthat helyette"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Hogyan kell értelmezni a biztonsági jeleknél a sárga alapon lévő fekete háromszöget és a kör alakú kék alapot?",
+        "a": [
+            "A háromszög figyelmeztető jel, a kék kör rendelkező (kötelező) jel",
+            "A háromszög tiltó jel, a kék kör pedig elsősegélyt jelző tábla",
+            "Mindkettő általános veszélyt és azonnali menekülési útvonalat jelöl"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "A klíma elvárások alapján milyen szigorú szabály vonatkozik a fűtőtestek környezetére tűzveszélyes helyeken?",
+        "a": [
+            "Robbanásveszélyes, éghető vagy gyúlékony dolgok nem tárolhatók a közelükben",
+            "Bármilyen anyag tárolható mellettük, ha a fűtőtest le van burkolva",
+            "Kötelező éghető anyagokkal körbevenni őket a hatékonyabb hővezetés miatt"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Hogyan kell kinyílnia a szabadba vezető ajtónak a munkahelyi közlekedési szabályok szerint?",
+        "a": [
+            "Mindig kifelé kell nyílnia",
+            "Mindig befelé kell nyílnia, hogy ne akadályozza a külső járdát",
+            "Bármerre nyílhat, vagy lehet kizárólag kézi tolóajtó is"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Mit jelent pontosan az 'információ' definíciója az informatikai alapismeretek fejezet szerint?",
+        "a": [
+            "Értelmezett adat / olyan új ismeret, ami meglévő bizonytalanságot szüntet meg",
+            "A számítógép monitorán megjelenő összes karakter és képpont fizikai mérete",
+            "Bármilyen strukturálatlan számsor, amit a gép merevlemeze tárol"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Mi a Neumann-féle tárolt program elvének legfontosabb kitétele?",
+        "a": [
+            "A program utasításai és a feldolgozandó adatok ugyanabban a belső memóriában vannak",
+            "A programokat szigorúan egy külső, írásvédett adathordozóról kell futtatni",
+            "A processzor nem tárolhat adatokat, azok kizárólag a merevlemezen maradhatnak"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Melyik állítás igaz a processzor mellett elhelyezkedő gyorsítótárra (Cache)?",
+        "a": [
+            "A CPU és a lassabb RAM közötti sebességkülönbséget hidalja át",
+            "A merevlemezen lévő töredezett fájlok szoftveres gyorsítását végzi",
+            "Hálózati hiba esetén ideiglenesen tárolja az elküldött e-maileket"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Milyen hálózati topológiára jellemző az, hogy minden egyes munkaállomás egyetlen központi eszközhöz (pl. switch) csatlakozik?",
+        "a": [
+            "Csillag topológia",
+            "Sín (busz) topológia",
+            "Gyűrű topológia"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Hány bites az IPv4 és az IPv6 hálózati címzési rendszer a dokumentum alapján?",
+        "a": [
+            "Az IPv4 32 bites, míg az IPv6 128 bites",
+            "Az IPv4 16 bites, míg az IPv6 64 bites",
+            "Mindkét hálózati címzési rendszer egységesen 64 bites"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Mi a feladata a hálózati működés során a DNS (Domain Name System) kiszolgálónak?",
+        "a": [
+            "A weboldalak szöveges neveit (pl. domain) számszerű IP-címekké alakítja",
+            "Automatikusan kiosztja a hálózatra csatlakozó gépek helyi IP-címeit",
+            "Titkosítja a számítógép és az internet közötti teljes adatforgalmat"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "A biológiai eredetű megbetegedések lefolyásuk szerint milyen csoportokba sorolhatók a diák alapján?",
+        "a": [
+            "Akut (heveny), krónikus (idült), látens (lappangó), karcinogén vagy mutagén",
+            "Csak azonnali halált okozó vagy teljesen tünetmentes csoportokra",
+            "Hardveres, szoftveres és hálózati fertőzésekre"
+        ],
+        "correct": 0,
+        "isTricky": true
+    },
+    {
+        "q": "Melyik megállapítás igaz a RAM (operatív memória) működésére a gép kikapcsolásakor?",
+        "a": [
+            "A benne tárolt adatok az áram megszűnésével teljesen elvesznek (illékony)",
+            "Az adatok véglegesen és módosíthatatlanul rögzülnek a memóriachipekben",
+            "Az operációs rendszer automatikusan kimenti a tartalmát egy külső felhőbe"
+        ],
+        "correct": 0,
+        "isTricky": true
+    }
 ];
 
-let questions = []; let currentQuestionIndex = 0; let score = 0; const TEST_LENGTH = 50;
-function shuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+let questions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let testLength = 50;
+let currentMode = 'random50';
 
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function renderThemeList() {
+    const listContainer = document.getElementById("theme-list");
+    listContainer.innerHTML = "";
+    let total = 0;
+    
+    themeStats.forEach(item => {
+        total += item.count;
+        const row = document.createElement("div");
+        row.className = "theme-item";
+        row.innerHTML = `<span>${item.name}</span><span class="theme-count">${item.count} kérdés</span>`;
+        listContainer.appendChild(row);
+    });
+    
+    const totalRow = document.createElement("div");
+    totalRow.className = "theme-item";
+    totalRow.style.fontWeight = "bold";
+    totalRow.style.borderTop = "2px solid #dee2e6";
+    totalRow.style.marginTop = "10px";
+    totalRow.style.paddingTop = "10px";
+    totalRow.innerHTML = `<span>Összesen beolvasva:</span><span class="theme-count">${total} kérdés</span>`;
+    listContainer.appendChild(totalRow);
+}
+
+function showStartScreen() {
+    document.getElementById("start-section").style.display = "block";
+    document.getElementById("quiz-section").style.display = "none";
+    document.getElementById("result-section").style.display = "none";
+    document.getElementById("main-title").innerText = "Komplex Biztonságtechnikai és Informatikai Teszt";
+    renderThemeList();
+}
+
+function selectMode(mode) {
+    currentMode = mode;
+    startQuiz();
+}
 function startQuiz() {
-    let allQuestionsCopy = JSON.parse(JSON.stringify(originalQuestions)); shuffle(allQuestionsCopy); questions = allQuestionsCopy.slice(0, TEST_LENGTH);
-    questions.forEach(q => { let correctAnsText = q.a[q.correct]; shuffle(q.a); q.correct = q.a.indexOf(correctAnsText); });
-    currentQuestionIndex = 0; score = 0; document.getElementById("quiz-section").style.display = "block"; document.getElementById("result-section").style.display = "none"; document.getElementById("main-title").innerText = "Munkavédelmi és Informatikai Teszt"; showQuestion();
+    let allQuestionsCopy = JSON.parse(JSON.stringify(originalQuestions));
+    
+    if (currentMode === 'tricky') {
+        questions = allQuestionsCopy.filter(q => q.isTricky === true);
+        shuffle(questions);
+        testLength = questions.length;
+    } else {
+        shuffle(allQuestionsCopy);
+        if (currentMode === 'random50') {
+            testLength = Math.min(50, allQuestionsCopy.length);
+            questions = allQuestionsCopy.slice(0, testLength);
+        } else {
+            testLength = allQuestionsCopy.length;
+            questions = allQuestionsCopy;
+        }
+    }
+    
+    questions.forEach(q => {
+        let correctAnsText = q.a[q.correct];
+        shuffle(q.a);
+        q.correct = q.a.indexOf(correctAnsText);
+    });
+
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    document.getElementById("start-section").style.display = "none";
+    document.getElementById("quiz-section").style.display = "block";
+    document.getElementById("result-section").style.display = "none";
+    
+    showQuestion();
 }
 
 function showQuestion() {
-    const currentQuestion = questions[currentQuestionIndex]; const percent = (currentQuestionIndex / TEST_LENGTH) * 100; document.getElementById("progress").style.width = percent + "%";
-    document.getElementById("question-number").innerText = (currentQuestionIndex + 1) + " / " + TEST_LENGTH + " kérdés"; document.getElementById("question-text").innerText = currentQuestion.q;
-    const optionsContainer = document.getElementById("options-container"); optionsContainer.innerHTML = "";
+    const currentQuestion = questions[currentQuestionIndex];
+    const percent = (currentQuestionIndex / testLength) * 100;
+    document.getElementById("progress").style.width = percent + "%";
+    
+    if (currentMode === 'tricky') {
+        document.getElementById("question-number").innerText = "🔥 TRÜKKÖS MÓD: " + (currentQuestionIndex + 1) + " / " + testLength + " kérdés";
+    } else {
+        document.getElementById("question-number").innerText = (currentQuestionIndex + 1) + " / " + testLength + " kérdés";
+    }
+    
+    document.getElementById("question-text").innerText = currentQuestion.q;
+    const optionsContainer = document.getElementById("options-container");
+    optionsContainer.innerHTML = "";
     
     currentQuestion.a.forEach((option, index) => {
-        const button = document.createElement("button"); button.className = "option-btn"; button.innerText = option;
-        button.onclick = () => checkAnswer(button, index); optionsContainer.appendChild(button);
+        const button = document.createElement("button");
+        button.className = "option-btn";
+        button.innerText = option;
+        button.onclick = () => checkAnswer(button, index);
+        optionsContainer.appendChild(button);
     });
     document.getElementById("next-button").style.display = "none";
 }
 
 function checkAnswer(clickedButton, selectedIndex) {
-    const currentQuestion = questions[currentQuestionIndex]; const allButtons = document.querySelectorAll(".option-btn");
+    const currentQuestion = questions[currentQuestionIndex];
+    const allButtons = document.querySelectorAll(".option-btn");
     allButtons.forEach(btn => btn.disabled = true);
-    if (selectedIndex === currentQuestion.correct) { clickedButton.classList.add("correct"); score++; } else { clickedButton.classList.add("wrong"); allButtons[currentQuestion.correct].classList.add("correct"); }
+    
+    if (selectedIndex === currentQuestion.correct) {
+        clickedButton.classList.add("correct");
+        score++;
+    } else {
+        clickedButton.classList.add("wrong");
+        allButtons[currentQuestion.correct].classList.add("correct");
+    }
     document.getElementById("next-button").style.display = "block";
 }
 
 function nextQuestion() {
     currentQuestionIndex++;
-    if (currentQuestionIndex < TEST_LENGTH) { showQuestion(); } else { showResults(); }
+    if (currentQuestionIndex < testLength) {
+        showQuestion();
+    } else {
+        showResults();
+    }
 }
 
 function showResults() {
-    document.getElementById("quiz-section").style.display = "none"; document.getElementById("result-section").style.display = "block"; document.getElementById("main-title").innerText = "Eredményjelző";
-    document.getElementById("score").innerText = score + " / " + TEST_LENGTH; const finalPercent = Math.round((score / TEST_LENGTH) * 100); document.getElementById("percent").innerText = finalPercent + "%";
+    document.getElementById("quiz-section").style.display = "none";
+    document.getElementById("result-section").style.display = "block";
+    document.getElementById("main-title").innerText = "Eredményjelző";
+    
+    document.getElementById("score").innerText = score + " / " + testLength;
+    const finalPercent = Math.round((score / testLength) * 100);
+    document.getElementById("percent").innerText = finalPercent + "%";
 }
-window.onload = startQuiz;
+
+window.onload = showStartScreen;
 </script>
 </body>
 </html>
