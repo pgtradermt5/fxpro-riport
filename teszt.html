@@ -3,136 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Összevont Munkavédelmi és Technológiai Teszt</title>
+    <title>Véletlenszerű 50 Kérdéses Teszt</title>
     <style>
-        :root {
-            --bg-color: #121824;
-            --card-bg: #1e293b;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background-color: var(--card-bg); width: 100%; max-width: 600px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; text-align: center; }
-        h1 { font-size: 24px; margin-bottom: 10px; color: #fff; }
-        h2 { font-size: 20px; margin-bottom: 20px; }
-        p { color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; }
-        .stats-bar { display: flex; justify-content: space-between; margin-bottom: 20px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 14px; }
-        .question-box { background: rgba(255,255,255,0.02); border: 1px solid #334155; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left; min-height: 120px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; }
-        .answers-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 25px; }
-        .btn-opt { background: #273549; border: 1px solid #3b4f6a; color: var(--text-color); padding: 14px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 16px; transition: all 0.2s; }
-        .btn-opt:hover { background: #334662; border-color: var(--accent-color); }
-        .btn-opt.correct { background: var(--success) !important; border-color: var(--success); color: white; }
-        .btn-opt.wrong { background: var(--danger) !important; border-color: var(--danger); color: white; }
-        .btn-main { background-color: var(--accent-color); color: white; border: none; padding: 14px 28px; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s; width: 100%; }
-        .btn-main:hover { background-color: var(--accent-hover); }
-        .hidden { display: none; }
-        .circle-chart { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--accent-color) 0%, #334155 0%); display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto; position: relative; }
-        .circle-chart::before { content: ''; position: absolute; width: 100px; height: 100px; background-color: var(--card-bg); border-radius: 50%; }
-        .circle-text { position: relative; font-size: 24px; font-weight: bold; color: white; }
-        .summary-details { margin-bottom: 30px; font-size: 16px; text-align: left; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; }
-        .summary-details div { margin-bottom: 8px; display: flex; justify-content: space-between; }
+        :root { --primary: #2b5c8f; --primary-hover: #1e436d; --bg: #f4f7f6; --card-bg: #ffffff; --text: #333333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 800px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 30px; }
+        .progress-bar { background-color: #e9ecef; border-radius: 8px; overflow: hidden; margin-bottom: 25px; }
+        .progress { height: 10px; background-color: var(--primary); width: 0%; transition: width 0.3s ease; }
+        .quiz-box { display: block; }
+        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background-color: #f8f9fa; border: 2px solid #dee2e6; padding: 14px 20px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s ease; }
+        .option-btn:hover { background-color: #e9ecef; border-color: #adb5bd; }
+        .result-box { display: none; text-align: center; }
+        .score-text { font-size: 2.5rem; font-weight: bold; color: var(--primary); margin: 20px 0; }
+        .percentage { font-size: 1.5rem; margin-bottom: 30px; }
+        .restart-btn { background-color: var(--primary); color: white; border: none; padding: 15px 35px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
+        .restart-btn:hover { background-color: var(--primary-hover); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 1. OLDAL -->
-        <div id="screen-start">
-            <h1>Összevont Munkavédelmi és Technológiai Teszt</h1>
-            <h2>Munkavédelmi Teszt</h2>
-            <p>A teszt 50 kérdést tartalmaz (Munkavédelem, Ergológia, Balesetvédelem, Informatika és Resin 3D Nyomtatás).</p>
-            <button class="btn-main" onclick="startTest()">Teszt Indítása</button>
-        </div>
-        <!-- 2. OLDAL -->
-        <div id="screen-quiz" class="hidden">
-            <div class="stats-bar">
-                <span id="progress-text">1 / 50</span>
-                <div>
-                    <span style="color: var(--success)">Helyes: <b id="score-correct">0</b></span> | 
-                    <span style="color: var(--danger)">Helytelen: <b id="score-wrong">0</b></span>
-                </div>
-            </div>
-            <div class="question-box" id="question-text">Kérdés betöltése...</div>
-            <div class="answers-grid" id="answers-container"></div>
-            <button class="btn-main hidden" id="btn-next" onclick="nextQuestion()">Következő kérdés</button>
-        </div>
-
-        <!-- 3. OLDAL -->
-        <div id="screen-result" class="hidden">
-            <h2>Teszt Befejezve!</h2>
-            <div class="circle-chart" id="result-circle">
-                <span class="circle-text" id="result-percent">0%</span>
-            </div>
-            <div class="summary-details">
-                <div><span>Összes válasz:</span> <b id="res-total">0/50</b></div>
-                <div><span>Helyes találat:</span> <b id="res-correct" style="color: var(--success)">0</b></div>
-            </div>
-            <button class="btn-main" onclick="restartTest()">Újrapróbálkozás</button>
-        </div>
+<div class="container">
+    <h1 id="main-title">Munkavédelmi és Informatikai Teszt</h1>
+    <div id="quiz-section" class="quiz-box">
+        <div class="progress-bar"><div id="progress" class="progress"></div></div>
+        <div id="question-number" style="font-weight: bold; margin-bottom: 5px; color: #666;"></div>
+        <div id="question-text" class="question-text"></div>
+        <div id="options-container" class="options"></div>
     </div>
+    <div id="result-section" class="result-box">
+        <h2>A teszt véget ért!</h2>
+        <p>Az Ön elért eredménye az 50 kérdésből:</p>
+        <div id="score" class="score-text">0 / 50</div>
+        <div id="percent" class="percentage">0%</div>
+        <button class="restart-btn" onclick="startQuiz()">Újra (Újabb 50 véletlen kérdés)</button>
+    </div>
+</div>
+<script>
+const originalQuestions = [
+    { q: "Mi a munkavédelem fogalma?", a: ["A szervezett munkavégzésre vonatkozó biztonsági és egészségügyi követelmények összessége", "Csak a gyárakban kötelező balesetvédelmi szabályok gyűjteménye", "A fizetett szabadságok kiadásának törvényi szabályozása"], correct: 0 },
+    { q: "Mi támogatja a munkavédelem követelményrendszerét?", a: ["Törvénykezési, szervezési és intézményi előírások rendszere", "Kizárólag a cégvezetők egyéni döntései", "Nemzetközi gazdasági alapítványok"], correct: 0 },
+    { q: "Mi a munkavédelem célja?", a: ["Biztonságos, egészséges, a dolgozók erejét és egészségét nem károsító munkakörülmények megvalósítása", "A profit maximális növelése a biztonság minimalizálásával", "A munkaidő minél hosszabbá tétele"], correct: 0 },
+    { q: "Mi a munkavédelem feladata a szabályok szintjén?", a: ["A biztonságtechnikai, tűzvédelmi és környezetvédelmi előírások betartása és betarttatása", "A könyvelési és adózási feladatok ellenőrzése", "A hirdetések és állásbörzék szervezése"], correct: 0 },
+    { q: "Melyek a munkavédelem főbb területei?", a: ["Munkabiztonság, foglalkozás-egészségügy, munkahelyi környezet, baleset-, tűz- és környezetvédelem", "Munkabér, szabadság és cafeteria menedzsment", "Adatvédelem, hálózati biztonság és szoftverfejlesztés"], correct: 0 },
+    { q: "Mit jelent a munkabiztonság?", a: ["Az egészséget nem veszélyeztető és biztonságos munkavégzésre vonatkozó szabályok megalkotása és betartása", "A cég kapuinak fizikai zárva tartását", "A szerverek jelszavas védelmét"], correct: 0 },
+    { q: "Mi a foglalkozás-egészségügy feladata?", a: ["A munkakörnyezeti terhelések vizsgálata és a munkaköri egészségi alkalmasság megállapítása", "A táppénzes papírok utólagos hamisítása", "Ingyenes gyógyszerek osztása minden dolgozónak"], correct: 0 },
+    { q: "Melyek a munkavédelem jogi és igazgatási eszközei?", a: ["A kötelezettségeket rögzítő jogszabályok, az ellenőrző hatóságok és a felelősségre vonás", "A szóbeli dorgálások és prémium megvonások", "A céges szabályzatok belső elégetése"], correct: 0 },
+    { q: "Melyik törvény szabályozza az alapvető munkajogi kérdéseket Magyarországon?", a: ["A 2012. évi I. törvény (Munka Törvénykönyve - Mt.)", "Az Alkotmánybíróság 2000. évi határozata", "A 1993. évi Munkavédelmi Törvény önmagában"], correct: 0 },
+    { q: "Ki ellenőrzi a munkajogi szabályok betartását?", a: ["Az állam intézményei", "Kizárólag a szakszervezeti titkárok", "Nemzetközi auditorok évente egyszer"], correct: 0 },
+    { q: "Hogyan jön létre a munkaviszony?", a: ["Írásba foglalt munkaszerződés megkötésével", "Szóbeli megegyezéssel és kézfogással", "A munkahelyen való fizikai megjelenéssel"], correct: 0 },
+    { q: "Kik a munkaviszony alanyai?", a: ["A munkáltató és a munkavállaló", "A könyvelő és a HR menedzser", "A tulajdonos és az állami ellenőr"], correct: 0 },
+    { q: "Ki lehet munkáltató a Munka Törvénykönyve szerint?", a: ["Aki jogképes (természetes személy, jogi személy vagy jogi személyiséggel nem rendelkező társaság)", "Csak a 18 év feletti egyéni vállalkozók", "Kizárólag állami vállalatok és szövetkezetek"], correct: 0 },
+    { q: "Ki lehet munkavállaló?", a: ["Csak természetes személy", "Természetes és jogi személy egyaránt", "Bármilyen bejegyzett alapítvány"], correct: 0 },
+    { q: "Általános szabályként hányadik életév betöltésétől lehet munkaviszonyt létesíteni?", a: ["A 16. életév betöltésétől", "A 14. életév betöltésétől", "A 18. életév betöltésétől"], correct: 0 },
+    { q: "Milyen feltétellel létesíthet munkát egy 15. életévét betöltött tanuló?", a: ["Iskolai szünet alatt, nappali tagozatosként és a törvényes képviselő hozzájárulásával", "Bármikor az évben, ha az iskolaigazgató megengedi", "Csak éjszakai műszakban, ha szülői kísérettel végzi"], correct: 0 },
+    { q: "Melyik NEM kötelező tartalmi eleme a munkaszerződésnek?", a: ["A céges autó típusa és színe", "A munkakör és a munkabér", "A munkavégzés helye és a munkába lépés időpontja"], correct: 0 },
+    { q: "Legfeljebb mennyi lehet a próbaidő tartama?", a: ["Maximum 3 hónap", "Maximum 6 hónap", "Maximum 1 hónap"], correct: 0 },
+    { q: "Melyik szervezet segít ingyenesen a munkahelykeresésben?", a: ["Munkaügyi Hivatalok / Központok / FIT", "Magán-fejvadász ügynökségek", "Kizárólag az Európai Unió Bírósága"], correct: 0 },
+    { q: "Mi az EURES célja?", a: ["Az EU országai közötti munkaerő-áramlás elősegítése", "A számítógépes vírusok kiirtása az irodákból", "A fűtési rendszerek szabványosítása"], correct: 0 },
+    { q: "Évente körülbelül hányan veszítik életüket munkahelyi balesetben az EU-ban?", a: ["Több mint 5500 ember", "Körülbelül 500 ember", "Pontosan 159 000 ember"], correct: 0 },
+    { q: "Mekkora költséggel terhelik a munkával kapcsolatos megbetegedések és balesetek az EU gazdaságát?", a: ["490 milliárd EUR-val", "159 milliárd EUR-val", "10 milliárd EUR-val"], correct: 0 },
+    { q: "Mi a megelőzés végső célja a munkavédelemben?", a: ["A munkahelyi balesetek és foglalkozási megbetegedések csökkentése és felszámolása", "A biztosítási díjak elkerülése jogi kiskapukkal", "A munkavállalók folyamatos otthon tartása"], correct: 0 },
+    { q: "Kit terhel az elsődleges felelősség a kockázatok megelőzésében?", a: ["A felsővezetőket és a munkáltatókat", "Kizárólag a takarítószemélyzetet", "A Munkaügyi Hivatal külső ellenőrét"], correct: 0 },
+    { q: "Melyik a kockázatmegelőzés egyik alapelve?", a: ["Helyettesítse a veszélyest veszélytelennel vagy kevésbé veszélyessel", "A kockázatokat mindig a folyamat legvégén kezelje", "Az egyéni védelmet részesítse előnyben a csoportossal szemben"], correct: 0 },
+    { q: "A védekezés során melyik élvez elsőbbséget?", a: ["A csoportos védőintézkedések az egyénivel szemben", "Az egyéni védőintézkedések a csoportossal szemben", "Mindkettő teljesen egyenrangú minden helyzetben"], correct: 0 },
+    { q: "Kötelező-e a munkáltatónak konzultálnia a dolgozókkal az egészségvédelemről?", a: ["Igen, kötelesek konzultációt folytatni a dolgozókkal vagy képviselőikkel", "Nem, ez egy opcionális lehetőség", "Csak akkor, ha halálos baleset történt"], correct: 0 },
+    { q: "Ki határozza meg a munkahely kialakításának tárgyi feltételeit?", a: ["Jogszabályok, szabványok és egyéb műszaki előírások", "Kizárólag a belső lakberendező dizájnterve", "A legidősebb munkavállaló tapasztalata"], correct: 0 },
+    { q: "Milyen követelmény vonatkozik a munkahelyi padozatra?", a: ["Egyenletes, könnyen tisztítható és még nedvesen se csússzon", "Fényesre csiszolt, tükröződő és csúszós legyen", "Bármilyen anyag jó, ha olcsó volt"], correct: 0 },
+    { q: "Hogyan kell kinyílnia a szabadba vezető ajtónak?", a: ["Mindig kifelé kell nyílnia", "Mindig befelé kell nyílnia", "Csak tolóajtó lehet"], correct: 0 },
+    { q: "Milyen magas korláttal kell ellátni a lépcsőt, ha 0,8 méternél magasabb szintet köt össze?", a: ["Legalább 1 méter magas korláttal, max. 12 cm-es rácsnyílással", "Legalább 2 méter magas korláttal, rácsok nélkül", "Fél méteres korlát is elegendő"], correct: 0 },
+    { q: "Legfeljebb mekkora lehet a lépcsők magassága a munkahelyen?", a: ["Nem lehet több 17 cm-nél", "Nem lehet több 25 cm-nél", "Pontosan 10 cm-nek kell lennie"], correct: 0 },
+    { q: "Mi határozza meg a munkahelyi világítás típusát?", a: ["A munkavégzés módja", "A cégvezető aktuális hangulata", "A falak festésének színe"], correct: 0 },
+    { q: "Mit jelent a kék biztonsági szín?", a: ["Rendelkezés, kötelező előírás", "Tiltás vagy veszély", "Figyelmeztetés a veszélyre"], correct: 0 },
+    { q: "Mit jelent a vörös/piros biztonsági szín?", a: ["Tiltás, veszély, vagy tűzvédelmi eszköz", "Figyelmeztetés", "Vészkijárat, elsősegély"], correct: 0 },
+    { q: "Milyen alakú és színű a FIGYELMEZTETŐ jel?", a: ["Háromszög alakú, sárga alapon fekete piktogram fekete szegéllyel", "Kör alakú, kék alapon fehér piktogram", "Négyzet alakú, zöld alapon fehér piktogram"], correct: 0 },
+    { q: "Mit jelent a zöld biztonsági szín?", a: ["Vészkijárat, menekülési útvonal, elsősegély, veszélymentesség", "Kötelező rendelkezés", "Robbanásveszélyes légkör"], correct: 0 },
+    { q: "Milyen a TILTÓ jel geometriai megjelenése?", a: ["Kör alakú, fehér alapon fekete piktogram vörös szegéllyel, ferdén áthúzva", "Háromszög alakú, sárga alapon fekete piktogram", "Kör alakú, kék alapon fehér piktogram"], correct: 0 },
+    { q: "Milyen hangjelzést alkalmaznak menekülésre felszólításkor?", a: ["Folyamatos hangjelzést", "Szakaszosan villogó dallamot", "Rövid, másodpercenként megszakadó sípolást"], correct: 0 },
+    { q: "Milyen csoportokba sorolhatók a foglalkozási megbetegedések eredetük szerint?", a: ["Fizikai, kémiai és biológiai eredetűek", "Szoftveres, hardveres és hálózati eredetűek", "Gazdasági, morális és szociális eredetűek"], correct: 0 },
+    { q: "Melyek a fizikai eredetű megbetegedési tényezők?", a: ["Zaj, vibráció, por, sugárzások, hő- és hidegártalom", "Mérgező gázok és növényvédő szerek", "Baktériumok, vírusok és gombák"], correct: 0 },
+    { q: "Hogyan kerülhetnek be a kémiai anyagok a szervezetbe?", a: ["Bőrön át, a légutakon vagy az emésztőrendszeren keresztül", "Csak a fülön keresztül", "Kizárólag közvetlen injekcióval"], correct: 0 },
+    { q: "Milyen lefolyásúak lehetnek a biológiai eredetű megbetegedések?", a: ["Akut, krónikus, látens, karcinogén vagy mutagén", "Csak azonnali halált okozóak", "Kizárólag tünetmentesek"], correct: 0 },
+    { q: "Adhat-e a munkáltató pénzbeli megváltást a biztonságos munkavégzés követelményeinek teljesítése helyett?", a: ["Nem, pénzbeli vagy egyéb megváltást nem adhat", "Igen, ha a dolgozó írásban kéri a pótlékot", "Igen, veszélyes munkakörökben ez kötelező"], correct: 0 },
+    { q: "Megtagadhatja-e a munkavállaló a munkát, ha nem biztosítják az egyéni védőeszközt?", a: ["Igen, megtagadhatja a munkavégzést", "Nem, a munkát el kell végezni, és utólag kell panaszt tenni", "Csak akkor, ha a szakszervezet engedélyezi"], correct: 0 },
+    { q: "Hány kategóriája van az egyéni védőeszközöknek a védelmi szint alapján?", a: ["3 kategória", "5 kategória", "2 kategória"], correct: 0 },
+    { q: "Melyik kategóriába tartoznak a komplex tervezésű, halálos veszély ellen védő eszközök?", a: ["3. kategória", "1. kategória", "2. kategória"], correct: 0 },
+    { q: "Mi az 'információ' definíciója az informatikában?", a: ["Értelmezett adat / olyan új ismeret, ami bizonytalanságot szüntet meg", "Bármilyen számhalmaz, amit a gép kiír", "Egy elküldött e-mail fizikai mérete"], correct: 0 },
+    { q: "Mi az 'adat' fogalma?", a: ["Elemi ismeret, tények/fogalmak megjelenési formája, ami feldolgozásra alkalmas", "Az információ megértett, hasznosított formája", "A kódolási folyamat végeredménye"], correct: 0 },
+    { q: "Mi a 'kód'?", a: ["Megállapodás szerinti jelek vagy szimbólumok rendszere az információ megadására", "A számítógép elektromos feszültségszintje", "Egy titkos jelszó, amit senki sem ismerhet"], correct: 0 },
+    { q: "Milyen anyagnak nem szabad a fűtőtestek közelében lennie a munkahelyen?", a: ["Robbanásveszélyes, éghető vagy gyúlékony dolgoknak", "Fémeknek és kerámiáknak", "Csak az irodai papíroknak"], correct: 0 },
+    { q: "Milyen mértékegységben fejezik ki a hang erősségét a dokumentum szerint?", a: ["Decibelben (dB)", "Hertzben (Hz)", "Wattban (W)"], correct: 0 },
+    { q: "Hány helyen lehetséges az ipari zaj csökkentése?", a: ["Három helyen: a forrásnál, a térben és az érzékelőnél", "Két helyen: csak a gépben és a fülben", "Egy helyen: kizárólag a falakon"], correct: 0 },
+    { q: "Milyen anyaggal töltik ki a zajforrás köré emelt összetett burkolatokat?", a: ["Kőzetgyapottal", "Betonnal", "Műanyag habbal"], correct: 0 },
+    { q: "Körülbelül mekkora tompítást (dB) lehet elérni a zajforrás befedésével?", a: ["10-20 dB-es tompítást", "50-60 dB-es tompítást", "Mindent teljesen elnémít (100 dB)"], correct: 0 },
+    { q: "Mivel korlátozható a közvetlenül terjedő hang?", a: ["A forrás és az érzékelő közé állított akadállyal", "A világítás lekapcsolásával", "A gépek gyakoribb olajozásával"], correct: 0 },
+    { q: "Milyen anyagokkal csökkenthető a közvetve terjedő hang?", a: ["Hangelnyelő anyagokkal (akusztikai mennyezetek, válaszfalak)", "Fényes fémlemezekkel", "Egyszerű üvegablakokkal"], correct: 0 },
+    { q: "Milyen rezgéseket különböztetünk meg egészségkárosító hatásuk szerint?", a: ["Kisfrekvenciás (csont/ízület károsító) és nagyfrekvenciás (érgörcsöt okozó)", "Csak a fület károsító rezgéseket", "Hardveres és szoftveres rezgéseket"], correct: 0 },
+    { q: "Hogyan kell elhelyezni a rezgésártalmat okozó gépeket a munkahelyen?", a: ["Külön kell őket telepíteni", "Közvetlenül az étkező mellé kell rakni", "A padozat legpuhább részére kell tenni"], correct: 0 },
+    { q: "Melyik NEM tartozik a látható fény hullámhosszától eltérő elektromágneses sugárzások közé?", a: ["A monitor kék fénye", "Infravörös, ultraibolya, lézer", "Röntgen és radioaktív sugárzás"], correct: 0 },
+    { q: "Kik tartózkodhatnak a sugárzásnak kitett munkahelyi területeken?", a: ["Csak az arra a munkahelyre kioktatott munkavállalók a megfelelő védőeszközzel", "Bármelyik látogató vagy ügyfél", "Kizárólag a cégvezető engedély nélkül"], correct: 0 },
+    { q: "Melyik NEM a munkavállaló személyi feltétele a munkavégzéshez?", a: ["Saját tulajdonú számítógép megléte", "Megfelelő élettani adottságok, életkor és egészségi alkalmasság", "Szükség esetén pályaalkalmassági vizsgálat és szakképesítés"], correct: 0 },
+    { q: "Milyen típusú orvosi alkalmassági vizsgálatokat különít el a szöveg?", a: ["Előzetes, időszakos, soron kívüli és záró vizsgálat", "Csak belgyógyászati és szemészeti vizsgálat", "Kizárólag jogosítvány-hosszabbítási vizsgálat"], correct: 0 },
+    { q: "Melyik rendelet határozza meg az egészségügyi alapkövetelményeket a szövegben?", a: ["A 33/1998. (VI.24.) NM rendelet", "A 2012. évi I. törvény közvetlenül", "A 1993. évi EU direktíva"], correct: 0 },
+    { q: "Milyen feltételek együttes teljesülése kell a biológiai fertőzés létrejöttéhez?", a: ["Alkalmas kórokozó, a fertőzés terjesztője és egy fogékony szervezet", "Csak a hideg időjárás és a piszkos padozat", "Egy elavult számítógépes vírus és egy fertőzött pendrive"], correct: 0 },
+    { q: "Mit köteles a munkáltató biztosítani az egészségügyi feltételek részeként minden dolgozónak?", a: ["Megfelelő mennyiségű és minőségű ivóvizet, öltözködési és étkezési lehetőséget", "Ingyenes meleg ételt és kávét naponta háromszor", "Saját irodát és klímaberendezést"], correct: 0 },
+    { q: "Mikor kell veszély esetén a munkavégzést kötelezően beszüntetni?", a: ["Azonnal, amint a veszélyhelyzet fennáll", "Csak a műszak végén, ha nem javul a helyzet", "Ha az állami ellenőr írásban elrendeli"], correct: 0 },
+    { q: "Mit kell igazolnia a munkavállalónak az aláírásával az egyéni védőeszközök kapcsán?", a: ["Az eszköz átvételét, valamint a használatának oktatását, gyakorlását", "A munkaszerződés felbontását", "A napi ledolgozott munkaóráit"], correct: 0 },
+    { q: "Szabad-e egyéni védőeszközt írásbeli engedély nélkül elvinni a munkahelyről?", a: ["Nem, szigorúan tilos elvinni", "Igen, a dolgozó saját tulajdonává válik", "Csak hétvégén megengedett"], correct: 0 },
+    { q: "Melyik kategóriájú védőeszköznél vélelmezi a gyártó, hogy a felhasználó maga is képes megítélni a védelmi szintet?", a: ["1. kategória (kis védelmi szintű, egyszerű eszközök)", "3. kategória (komplex tervezésű eszközök)", "2. kategória"], correct: 0 },
+    { q: "Hány fokos felületi hőmérsékletig tartozik a tárgyak kezelése az 1. kategóriájú védőeszközök alá?", a: ["Az 50°C-t nem meghaladó tárgyakig", "A 100°C feletti tárgyakig", "Pontosan 0°C alatti tárgyakig"], correct: 0 },
+    { q: "Melyik eszköz tartozik egyértelműen a 2. kategóriájú védőeszközök közé?", a: ["Minden védősisak (sportsisak is), arcvédők, szemvédők és hallásvédők", "A papírmaszkok és a kertészkesztyűk", "A búvárkészülékek és a tűzoltósisakok"], correct: 0 },
+    { q: "Milyen környezeti levegő-hőmérséklet felett számít egy eszköz a 3. kategóriába (hőhatás elleni védelem)?", a: ["Amely eléri vagy meghaladja a 100°C-ot", "Amely eléri a 40°C-ot", "Pontosan 50°C-os hőmérsékletnél"], correct: 0 },
+    { q: "A munkavédelmi szabályok szerint mekkora feszültség számít már veszélyesnek váltakozó áram esetén?", a: ["Az 50 V és az ezt meghaladó értékek", "A 12 V feletti értékek", "Csak a 230 V feletti hálózati feszültség"], correct: 0 },
+    { q: "Melyik nyelv NEM szerepel példaként a számítógépek által ismert kódnyelvek (programnyelvek) között?", a: ["HTML/CSS", "BASIC, LOGO", "Java, Pascal"], correct: 0 }
+];
 
-    <script>
-        const questionBank = [
-            { q: "Milyen védőfelszerelést kötelező használni Resin (gyantás) 3D nyomtatás során a folyékony alapanyag kezelésekor?", a: ["Sima pamut kesztyű", "Nitrile kesztyű és védőszemüveg", "Nem szükséges védőfelszerelés", "Kizárólag pormaszk"], c: 1 },
-            { q: "Mi a teendő áramütéses baleset esetén elsősorban?", a: ["A sérült azonnali elhúzása kézzel", "Áramtalanítás vagy a sérült kiszabadítása szigetelt eszközzel", "Mentők hívása az áramtalanítás előtt", "A sérült lelocsolása vízzel"], c: 1 },
-            { q: "Milyen szoftveres megoldás alkalmas a verziókövetésre az informatika területén?", a: ["Excel", "Photoshop", "Git", "Word"], c: 2 },
-            { q: "Mi az ergonómia fő célja a munkahelyen?", a: ["A munkaidő maximális meghosszabbítása", "A munkakörnyezet emberi adottságokhoz igazítása", "A gépek fogyasztásának csökkentése", "A papírmunka digitalizálása"], c: 1 }
-        ];
-
-        let currentIdx = 0; let correctCount = 0; let wrongCount = 0; let answered = false;
-
-        function startTest() {
-            document.getElementById('screen-start').classList.add('hidden');
-            document.getElementById('screen-quiz').classList.remove('hidden');
-            currentIdx = 0; correctCount = 0; wrongCount = 0;
-            updateStats(); loadQuestion();
-        }
-
-        function loadQuestion() {
-            answered = false; document.getElementById('btn-next').classList.add('hidden');
-            const qData = questionBank[currentIdx]; document.getElementById('question-text').innerText = qData.q;
-            const container = document.getElementById('answers-container'); container.innerHTML = '';
-            qData.a.forEach((ans, idx) => {
-                const btn = document.createElement('button'); btn.className = 'btn-opt'; btn.innerText = ans;
-                btn.onclick = () => selectAnswer(idx, btn); container.appendChild(btn);
-            });
-        }
-        function selectAnswer(idx, btnElement) {
-            if (answered) return; answered = true;
-            const qData = questionBank[currentIdx]; const buttons = document.getElementById('answers-container').children;
-            if (idx === qData.c) { btnElement.classList.add('correct'); correctCount++; } 
-            else { btnElement.classList.add('wrong'); buttons[qData.c].classList.add('correct'); wrongCount++; }
-            updateStats(); document.getElementById('btn-next').classList.remove('hidden');
-            if (currentIdx === questionBank.length - 1) { document.getElementById('btn-next').innerText = "Teszt Befejezve!"; } 
-            else { document.getElementById('btn-next').innerText = "Következő kérdés"; }
-        }
-
-        function nextQuestion() {
-            if (currentIdx < questionBank.length - 1) {
-                currentIdx++; document.getElementById('progress-text').innerText = `${currentIdx + 1} / 50`; loadQuestion();
-            } else { showResult(); }
-        }
-
-        function updateStats() {
-            document.getElementById('progress-text').innerText = `${currentIdx + 1} / 50`;
-            document.getElementById('score-correct').innerText = correctCount; document.getElementById('score-wrong').innerText = wrongCount;
-        }
-
-        function showResult() {
-            document.getElementById('screen-quiz').classList.add('hidden'); document.getElementById('screen-result').classList.remove('hidden');
-            const total = correctCount + wrongCount; const percent = total > 0 ? Math.round((correctCount / total) * 100) : 0;
-            document.getElementById('result-percent').innerText = `${percent}%`;
-            document.getElementById('res-total').innerText = `${total}/50`; document.getElementById('res-correct').innerText = correctCount;
-            document.getElementById('result-circle').style.background = `conic-gradient(var(--success) ${percent}%, #334155 ${percent}%)`;
-        }
-
-        function restartTest() {
-            document.getElementById('screen-result').classList.add('hidden'); document.getElementById('screen-start').classList.remove('hidden');
-        }
-    </script>
+let questions = []; let currentQuestionIndex = 0; let score = 0; const TEST_LENGTH = 50;
+function shuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+function startQuiz() {
+    let allQuestionsCopy = JSON.parse(JSON.stringify(originalQuestions)); shuffle(allQuestionsCopy); questions = allQuestionsCopy.slice(0, TEST_LENGTH);
+    questions.forEach(q => { let correctAnsText = q.a[q.correct]; shuffle(q.a); q.correct = q.a.indexOf(correctAnsText); });
+    currentQuestionIndex = 0; score = 0; document.getElementById("quiz-section").style.display = "block"; document.getElementById("result-section").style.display = "none"; document.getElementById("main-title").innerText = "Munkavédelmi és Informatikai Teszt"; showQuestion();
+}
+function showQuestion() {
+    const currentQuestion = questions[currentQuestionIndex]; const percent = (currentQuestionIndex / TEST_LENGTH) * 100; document.getElementById("progress").style.width = percent + "%";
+    document.getElementById("question-number").innerText = (currentQuestionIndex + 1) + " / " + TEST_LENGTH + " kérdés"; document.getElementById("question-text").innerText = currentQuestion.q;
+    const optionsContainer = document.getElementById("options-container"); optionsContainer.innerHTML = "";
+    currentQuestion.a.forEach((option, index) => { const button = document.createElement("button"); button.className = "option-btn"; button.innerText = option; button.onclick = () => checkAnswer(index); optionsContainer.appendChild(button); });
+}
+function checkAnswer(selectedIndex) { const currentQuestion = questions[currentQuestionIndex]; if (selectedIndex === currentQuestion.correct) { score++; } currentQuestionIndex++; if (currentQuestionIndex < TEST_LENGTH) { showQuestion(); } else { showResults(); } }
+function showResults() { document.getElementById("quiz-section").style.display = "none"; document.getElementById("result-section").style.display = "block"; document.getElementById("main-title").innerText = "Eredményjelző"; document.getElementById("score").innerText = score + " / " + TEST_LENGTH; const finalPercent = Math.round((score / TEST_LENGTH) * 100); document.getElementById("percent").innerText = finalPercent + "%"; }
+window.onload = startQuiz;
+</script>
 </body>
 </html>
