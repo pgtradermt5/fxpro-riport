@@ -5,81 +5,276 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Komplex Biztonságtechnikai és Informatikai Teszt</title>
     <style>
-        :root { 
-            --primary: #2b5c8f; 
-            --primary-hover: #1e436d; 
-            --bg: #f4f7f6; 
-            --card-bg: #ffffff; 
-            --text: #333333; 
-            --success: #28a745; 
-            --danger: #dc3545; 
-            --trick: #d9534f; 
-            --trick-hover: #max. 12 cm; 
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+            --skip-color: #475569;
+            --skip-hover: #334155;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 800px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); text-align: center; margin-bottom: 30px; }
-        .progress-bar { background-color: #e9ecef; border-radius: 8px; overflow: hidden; margin-bottom: 25px; }
-        .progress { height: 10px; background-color: var(--primary); width: 0%; transition: width 0.3s ease; }
-        .quiz-box { display: none; }
-        .start-box { display: block; text-align: center; }
-        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
-        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .option-btn { background-color: #f8f9fa; border: 2px solid #dee2e6; padding: 14px 20px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s ease; width: 100%; }
-        .option-btn:hover:not([disabled]) { background-color: #e9ecef; border-color: #adb5bd; }
-        .option-btn.correct { background-color: #d4edda !important; border-color: var(--success) !important; color: #155724; font-weight: bold; }
-        .option-btn.wrong { background-color: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
-        .next-btn { display: none; background-color: #ffc107; color: #212529; border: none; padding: 15px 25px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; text-align: center; transition: background-color 0.2s; margin-top: 10px; }
-        .next-btn:hover { background-color: #e0a800; }
-        .mode-btn { background-color: var(--primary); color: white; border: none; padding: 15px 25px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 8px; width: 80%; transition: background-color 0.2s; }
-        .mode-btn:hover { background-color: var(--primary-hover); }
-        .mode-btn.trick-btn { background-color: var(--trick); }
-        .mode-btn.trick-btn:hover { background-color: var(--trick-hover); }
-        .result-box { display: none; text-align: center; }
-        .score-text { font-size: 2.5rem; font-weight: bold; color: var(--primary); margin: 20px 0; }
-        .percentage { font-size: 1.5rem; margin-bottom: 30px; }
-        .restart-btn { background-color: var(--primary); color: white; border: none; padding: 15px 35px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
-        .restart-btn:hover { background-color: var(--primary-hover); }
-        .theme-container { text-align: left; max-width: 500px; margin: 0 auto 30px auto; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; }
-        .theme-title { font-weight: bold; margin-bottom: 10px; color: var(--primary); border-bottom: 2px solid #dee2e6; padding-bottom: 5px; }
-        .theme-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #dee2e6; }
-        .theme-item:last-child { border-bottom: none; }
-        .theme-count { font-weight: bold; color: #666; }
+
+        body {
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.1);
+            box-sizing: border-box;
+            -webkit-transform: translateZ(0); /* Safari GPU fix */
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .stats-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .stats-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .menu-btn {
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            text-align: center;
+            -webkit-appearance: none; /* Safari natív gomb fix */
+        }
+
+        .menu-btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-tricky { background-color: #ea580c; }
+        .btn-random { background-color: #0d9488; }
+        .btn-all { background-color: #2563eb; }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .badge {
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .tricky-badge {
+            background: #ffedd5;
+            color: #ea580c;
+            border: 1px solid #fed7aa;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .answers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .answer-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            color: var(--text-color);
+            font-weight: 500;
+            -webkit-appearance: none;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .answer-btn.correct {
+            background: #dcfce7 !important;
+            border-color: var(--success-color) !important;
+            color: #14532d !important;
+        }
+
+        .answer-btn.wrong {
+            background: #fee2e2 !important;
+            border-color: var(--error-color) !important;
+            color: #7f1d1d !important;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .next-btn {
+            background: var(--skip-color);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+            -webkit-appearance: none;
+        }
+
+        .next-btn:hover {
+            background: var(--skip-hover);
+        }
+
+        .next-btn.has-answered {
+            background: var(--primary-color);
+        }
+
+        .next-btn.has-answered:hover {
+            background: var(--primary-hover);
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            -webkit-appearance: none;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary-hover);
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 id="main-title">Komplex Biztonságtechnikai és Informatikai Teszt</h1>
-    
-    <div id="start-section" class="start-box">
-        <div class="theme-container">
-            <div class="theme-title">📚 Elérhető témakörök és kérdések:</div>
-            <div id="theme-list"></div>
+    <div class="container">
+        <h1>Komplex Biztonságtechnikai és Informatikai Teszt</h1>
+        
+        <!-- 1. KEZDŐKÉPERNYŐ / FŐOLDAL -->
+        <div id="menu-interface">
+            <div class="stats-box">
+                <div class="stats-title">📚 Elérhető témakörök és kérdések:</div>
+                <div id="stats-content">Modulok betöltése...</div>
+            </div>
+            
+            <h2>Kérjük, válaszd ki a játékmódot:</h2>
+            <div class="menu-buttons">
+                <button class="menu-btn btn-tricky" onclick="startQuiz('tricky')">🔥 Csak a Trükkös kérdések játszása</button>
+                <button class="menu-btn btn-random" onclick="startQuiz('random')">🎲 50 Véletlenszerű kérdés (vegyes)</button>
+                <button class="menu-btn btn-all" onclick="startQuiz('all')">📚 Összes kérdés végigjátszása</button>
+            </div>
         </div>
-        <p class="question-text">Kérjük, válaszd ki a játékmódot:</p>
-        <button class="mode-btn trick-btn" onclick="selectMode('tricky')">🔥 Csak a Trükkös kérdések játszása</button>
-        <button class="mode-btn" onclick="selectMode('random50')">🎲 50 Véletlenszerű kérdés (vegyes)</button>
-        <button class="mode-btn" onclick="selectMode('all')">📚 Összes kérdés végigjátszása</button>
-    </div>
 
-    <div id="quiz-section" class="quiz-box">
-        <div class="progress-bar"><div id="progress" class="progress"></div></div>
-        <div id="question-number" style="font-weight: bold; margin-bottom: 5px; color: #666;"></div>
-        <div id="question-text" class="question-text"></div>
-        <div id="options-container" class="options"></div>
-        <button id="next-button" class="next-btn" onclick="nextQuestion()">Következő kérdés ➔</button>
+        <!-- 2. JÁTÉK / KVÍZ FELÜLET -->
+        <div id="quiz-interface" style="display: none;">
+            <div class="progress-container">
+                <span id="progress-text">Kérdés: 0 / 0</span>
+                <span id="modul-badge" class="badge">Modul</span>
+            </div>
+
+            <div id="question-container" class="question-text">Kérdés betöltése...</div>
+            
+            <div id="answers-container" class="answers-grid"></div>
+
+            <div class="controls">
+                <button id="next-button" class="next-btn" onclick="goToNextQuestion()">Kérdés átugrása ➔</button>
+            </div>
+        </div>
+
+        <!-- 3. EREDMÉNYJELZŐ KÉPERNYŐ -->
+        <div id="result-interface" class="result-screen" style="display: none;">
+            <h2>Gratulálok, a teszt végére értél!</h2>
+            <p>Az elért eredményed a játékmenet alapján:</p>
+            <div class="score-display" id="score-text">0 / 0</div>
+            <p id="percentage-text">0%</p>
+            <button class="restart-btn" onclick="showMainMenu()">Vissza a főmenübe</button>
+        </div>
     </div>
-    
-    <div id="result-section" class="result-box">
-        <h2>A teszt véget ért!</h2>
-        <p>Az Ön elért eredménye:</p>
-        <div id="score" class="score-text">0 / 0</div>
-        <div id="percent" class="percentage">0%</div>
-        <button class="restart-btn" onclick="showStartScreen()">Vissza a főmenübe</button>
-    </div>
-</div>
-<script>
-const themeStats = [
+    <script>
+        const statisztikaAdat = [
     {
         "name": "1. Rész: Munkajog és Alapok",
         "count": 23
@@ -101,7 +296,7 @@ const themeStats = [
         "count": 15
     }
 ];
-const originalQuestions = [
+        const eredetiKerdesBank = [
     {
         "q": "Mi a munkavédelem pontos definíciója a dokumentum alapján?",
         "a": [
@@ -1173,149 +1368,164 @@ const originalQuestions = [
     }
 ];
 
-let questions = [];
-let currentQuestionIndex = 0;
-let score = 0;
-let testLength = 50;
-let currentMode = 'random50';
+        let aktivaltKerdesek = []; 
+        let currentIndex = 0;
+        let correctAnswersCount = 0;
+        let answeredQuestionsCount = 0;
+        let hasSelectedAnswer = false;
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function renderThemeList() {
-    const listContainer = document.getElementById("theme-list");
-    listContainer.innerHTML = "";
-    let total = 0;
-    
-    themeStats.forEach(item => {
-        total += item.count;
-        const row = document.createElement("div");
-        row.className = "theme-item";
-        row.innerHTML = `<span>${item.name}</span><span class="theme-count">${item.count} kérdés</span>`;
-        listContainer.appendChild(row);
-    });
-    
-    const totalRow = document.createElement("div");
-    totalRow.className = "theme-item";
-    totalRow.style.fontWeight = "bold";
-    totalRow.style.borderTop = "2px solid #dee2e6";
-    totalRow.style.marginTop = "10px";
-    totalRow.style.paddingTop = "10px";
-    totalRow.innerHTML = `<span>Összesen beolvasva:</span><span class="theme-count">${total} kérdés</span>`;
-    listContainer.appendChild(totalRow);
-}
-
-function showStartScreen() {
-    document.getElementById("start-section").style.display = "block";
-    document.getElementById("quiz-section").style.display = "none";
-    document.getElementById("result-section").style.display = "none";
-    document.getElementById("main-title").innerText = "Komplex Biztonságtechnikai és Informatikai Teszt";
-    renderThemeList();
-}
-
-function selectMode(mode) {
-    currentMode = mode;
-    startQuiz();
-}
-function startQuiz() {
-    let allQuestionsCopy = JSON.parse(JSON.stringify(originalQuestions));
-    
-    if (currentMode === 'tricky') {
-        questions = allQuestionsCopy.filter(q => q.isTricky === true);
-        shuffle(questions);
-        testLength = questions.length;
-    } else {
-        shuffle(allQuestionsCopy);
-        if (currentMode === 'random50') {
-            testLength = Math.min(50, allQuestionsCopy.length);
-            questions = allQuestionsCopy.slice(0, testLength);
-        } else {
-            testLength = allQuestionsCopy.length;
-            questions = allQuestionsCopy;
+        // Safari-biztos Fisher-Yates tömbkeverő algoritmus
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
         }
-    }
-    
-    questions.forEach(q => {
-        let correctAnsText = q.a[q.correct];
-        shuffle(q.a);
-        q.correct = q.a.indexOf(correctAnsText);
-    });
 
-    currentQuestionIndex = 0;
-    score = 0;
-    
-    document.getElementById("start-section").style.display = "none";
-    document.getElementById("quiz-section").style.display = "block";
-    document.getElementById("result-section").style.display = "none";
-    
-    showQuestion();
-}
+        function renderStats() {
+            const container = document.getElementById("stats-content");
+            if (!statisztikaAdat || statisztikaAdat.length === 0) {
+                container.innerText = "Nincs elérhető statisztikai adat.";
+                return;
+            }
+            
+            let htmlBuffer = statisztikaAdat.map(m => `• <strong>${m.name}</strong><br>${m.count} kérdés`).join("<br><br>");
+            let osszesen = statisztikaAdat.reduce((sum, item) => sum + item.count, 0);
+            
+            htmlBuffer += `<br><hr style="border:0; border-top:1px solid #bfdbfe; margin:15px 0;"><strong>Összesen beolvasva:</strong><br>${osszesen} kérdés`;
+            container.innerHTML = htmlBuffer;
+        }
 
-function showQuestion() {
-    const currentQuestion = questions[currentQuestionIndex];
-    const percent = (currentQuestionIndex / testLength) * 100;
-    document.getElementById("progress").style.width = percent + "%";
-    
-    if (currentMode === 'tricky') {
-        document.getElementById("question-number").innerText = "🔥 TRÜKKÖS MÓD: " + (currentQuestionIndex + 1) + " / " + testLength + " kérdés";
-    } else {
-        document.getElementById("question-number").innerText = (currentQuestionIndex + 1) + " / " + testLength + " kérdés";
-    }
-    
-    document.getElementById("question-text").innerText = currentQuestion.q;
-    const optionsContainer = document.getElementById("options-container");
-    optionsContainer.innerHTML = "";
-    
-    currentQuestion.a.forEach((option, index) => {
-        const button = document.createElement("button");
-        button.className = "option-btn";
-        button.innerText = option;
-        button.onclick = () => checkAnswer(button, index);
-        optionsContainer.appendChild(button);
-    });
-    document.getElementById("next-button").style.display = "none";
-}
+        function startQuiz(mode) {
+            currentIndex = 0;
+            correctAnswersCount = 0;
+            answeredQuestionsCount = 0;
 
-function checkAnswer(clickedButton, selectedIndex) {
-    const currentQuestion = questions[currentQuestionIndex];
-    const allButtons = document.querySelectorAll(".option-btn");
-    allButtons.forEach(btn => btn.disabled = true);
-    
-    if (selectedIndex === currentQuestion.correct) {
-        clickedButton.classList.add("correct");
-        score++;
-    } else {
-        clickedButton.classList.add("wrong");
-        allButtons[currentQuestion.correct].classList.add("correct");
-    }
-    document.getElementById("next-button").style.display = "block";
-}
+            if (mode === 'tricky') {
+                aktivaltKerdesek = eredetiKerdesBank.filter(q => q.isTricky === true);
+            } 
+            else if (mode === 'random') {
+                let csakNormalKerdesek = eredetiKerdesBank.filter(q => q.isTricky !== true);
+                // Safari-stabil keverés alkalmazása a másolaton
+                let masolat = JSON.parse(JSON.stringify(csakNormalKerdesek));
+                shuffleArray(masolat);
+                aktivaltKerdesek = masolat.slice(0, 50);
+            } 
+            else if (mode === 'all') {
+                aktivaltKerdesek = eredetiKerdesBank.filter(q => q.isTricky !== true);
+            }
 
-function nextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < testLength) {
-        showQuestion();
-    } else {
-        showResults();
-    }
-}
+            if (aktivaltKerdesek.length === 0) {
+                alert("A választott játékmódhoz nem található kérdés!");
+                return;
+            }
 
-function showResults() {
-    document.getElementById("quiz-section").style.display = "none";
-    document.getElementById("result-section").style.display = "block";
-    document.getElementById("main-title").innerText = "Eredményjelző";
-    
-    document.getElementById("score").innerText = score + " / " + testLength;
-    const finalPercent = Math.round((score / testLength) * 100);
-    document.getElementById("percent").innerText = finalPercent + "%";
-}
+            document.getElementById("menu-interface").style.display = "none";
+            document.getElementById("quiz-interface").style.display = "block";
+            document.getElementById("result-interface").style.display = "none";
 
-window.onload = showStartScreen;
-</script>
+            loadQuestion(currentIndex);
+        }
+
+        function loadQuestion(index) {
+            if (index >= aktivaltKerdesek.length) {
+                showResults();
+                return;
+            }
+
+            hasSelectedAnswer = false;
+            const qData = aktivaltKerdesek[index];
+            
+            const nextBtn = document.getElementById("next-button");
+            nextBtn.innerText = "Kérdés átugrása ➔";
+            nextBtn.classList.remove("has-answered");
+
+            document.getElementById("progress-text").innerText = `Kérdés: ${index + 1} / ${aktivaltKerdesek.length}`;
+            
+            const badge = document.getElementById("modul-badge");
+            if (qData.isTricky) {
+                badge.innerText = "🔥 Haladó / Trükkös";
+                badge.classList.add("tricky-badge");
+            } else {
+                badge.innerText = "Normál feladat";
+                badge.classList.remove("tricky-badge");
+            }
+
+            document.getElementById("question-container").innerText = qData.q;
+
+            const answersContainer = document.getElementById("answers-container");
+            answersContainer.innerHTML = "";
+
+            // Gombok létrehozása DocumentFragment-tel a gyorsabb Safari renderelésért
+            const fragment = document.createDocumentFragment();
+            qData.a.forEach((valaszSzoveg, i) => {
+                const btn = document.createElement("button");
+                btn.className = "answer-btn";
+                btn.innerText = valaszSzoveg;
+                btn.onclick = function() { selectAnswer(btn, i, qData.correct); };
+                fragment.appendChild(btn);
+            });
+            answersContainer.appendChild(fragment);
+        }
+
+        function selectAnswer(clickedButton, selectedIndex, correctIndex) {
+            if (hasSelectedAnswer) return; 
+            
+            hasSelectedAnswer = true;
+            answeredQuestionsCount++;
+            
+            const buttons = document.querySelectorAll(".answer-btn");
+            buttons.forEach((btn) => btn.disabled = true); 
+
+            if (selectedIndex === correctIndex) {
+                clickedButton.classList.add("correct");
+                correctAnswersCount++;
+            } else {
+                clickedButton.classList.add("wrong");
+                if (buttons[correctIndex]) {
+                    buttons[correctIndex].classList.add("correct"); 
+                }
+            }
+
+            const nextBtn = document.getElementById("next-button");
+            nextBtn.innerText = "Következő kérdés ➔";
+            nextBtn.classList.add("has-answered");
+        }
+
+        function goToNextQuestion() {
+            currentIndex++;
+            if (currentIndex < aktivaltKerdesek.length) {
+                loadQuestion(currentIndex);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz-interface").style.display = "none";
+            
+            const resultDiv = document.getElementById("result-interface");
+            resultDiv.style.display = "block";
+
+            document.getElementById("score-text").innerText = `${correctAnswersCount} / ${aktivaltKerdesek.length}`;
+            
+            const percentage = aktivaltKerdesek.length > 0 ? Math.round((correctAnswersCount / aktivaltKerdesek.length) * 100) : 0;
+            document.getElementById("percentage-text").innerText = `Eredmény: ${percentage}% (Ebből megválaszolva: ${answeredQuestionsCount} db)`;
+        }
+
+        function showMainMenu() {
+            document.getElementById("menu-interface").style.display = "block";
+            document.getElementById("quiz-interface").style.display = "none";
+            document.getElementById("result-interface").style.display = "none";
+            renderStats();
+        }
+
+        window.onload = function() {
+            renderStats();
+        };
+    </script>
 </body>
 </html>
